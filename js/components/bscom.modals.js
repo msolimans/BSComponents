@@ -1,3 +1,5 @@
+window.bscom = window.bscom || {};
+
 window.bscom.modals = (function () {
 
     var counter = 0, $modals = [], name = "smodal-",
@@ -43,6 +45,89 @@ window.bscom.modals = (function () {
     }
 
 
+    var registerEvents = function ($mw, data, cb, hiddenCb) {
+
+        //register shown event, set the width of popup according to the size md, lg
+        $mw.off('show.bs.modal').on('show.bs.modal', function (e) {
+
+            if ($(this)) {
+                var $modalDialog = $(this).find(".modal-dialog");
+
+                //if ($modalDialog.prop("class").indexOf("modal-lg") > -1) {
+                //    //$(this).find('.modal-dialog').css('overflow-y', 'auto');
+                //    $modalDialog.css('width', $(window).width() * 0.90);
+
+                //} else if ($modalDialog.prop("class").indexOf("modal-md") > -1) {
+                //    $modalDialog.css('width', $(window).width() * 0.60);
+                //}
+                $modalDialog.removeClass("modal-xs").removeClass("modal-sm").removeClass("modal-md").removeClass("modal-lg").removeClass("modal-xl");
+
+                switch (getCurrent().size.toLowerCase()) {
+
+                    case "sm":
+                    case "xs":
+                        $modalDialog.addClass("modal-sm");
+                        break;
+                    case "md":
+                        $modalDialog.addClass("modal-md");
+                        break;
+                    case "lg":
+                        $modalDialog.addClass("modal-lg");
+                        break;
+                    case "xl":
+                        $modalDialog.addClass("modal-xl");
+                        break;
+                }
+
+
+                //populate properties into form automatically otherwise put all remaining data (json format) inside "data" attribute
+                if (data && data.autoPopulate)
+                    for (var k in data) {
+                        if (data.hasOwnProperty(k) && k.toLowerCase() !== "autopopulate") {
+                            var $e = $(e.currentTarget).find("#" + k);
+                            if ($e && $e.length > 0) {
+                                $e = $e.first().val(data[k]);
+                            }
+                        }
+                    }
+                else
+                    $modalDialog.data("data", JSON.stringify(data));
+
+            }
+
+
+        });
+
+        //after shown event, set the height of popup and call callback function
+        $mw.off("shown.bs.modal").on("shown.bs.modal", function (e) {
+            $(this).find('.modal-dialog').css('max-height', $(window).height() * 0.90);
+
+            callFunc(cb, $(e.currentTarget));
+
+        });
+
+        //no content is removed until replaced by another window (keep it to get any values from window)
+        $mw.off("hidden.bs.modal").on("hidden.bs.modal", function (e) {
+
+            if (hiddenCb) {
+                var elem = getCurrent();
+
+                callFunc(hiddenCb, $(e.currentTarget), elem ? elem.rdata : undefined);
+
+                //remove the last elem (we don't need it anymore')
+                $modals.pop();
+                counter--;
+                //if (typeof hiddenCb === 'function')
+                //    hiddenCb($(e.currentTarget), elem ? elem.rdata : undefined);
+                //else {
+                //    window[hiddenCb].apply(null, [$(e.currentTarget), elem ? elem.rdata : undefined]);
+                //}
+            }
+            $mw.find("div.modal-content").html("");
+
+        });
+    }
+
 
     var callFunc = function (cb, $mw, args) {
         if (cb) {
@@ -70,7 +155,8 @@ window.bscom.modals = (function () {
         //$div.html(responseText);
         injectModalInfo($div, elem.title, elem.body);
 
-
+        //register events for callbacks and sizes
+        registerEvents(elem.window, elem.data, elem.cb, elem.hcb);
 
         //show the modal window and return it for further processing if needed
         elem.window.modal('show');
