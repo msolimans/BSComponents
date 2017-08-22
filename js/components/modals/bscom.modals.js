@@ -4,7 +4,7 @@ window.bscom.modals = (function () {
 
     var counter = 0, $modals = [], name = "smodal-",
         $modal = $(
-            '<div data-refresh="true" class="modal fade" id="modalWindow" tabindex="-1"  role="dialog" aria-labelledby="modalLabel" aria-hidden="true">' +
+            '<div data-refresh="true" class="modal fade" id="modalWindow"  role="dialog" aria-labelledby="modalLabel" aria-hidden="true">' +
             '<div class="modal-dialog ">' +
             '<div class="modal-content">' +
 
