@@ -114,19 +114,21 @@ window.bscom.modals = (function () {
 
                 callFunc(hiddenCb, $(e.currentTarget), elem ? elem.rdata : undefined);
 
-                //remove the last elem (we don't need it anymore')
-                $modals.pop();
-                counter--;
                 //if (typeof hiddenCb === 'function')
                 //    hiddenCb($(e.currentTarget), elem ? elem.rdata : undefined);
                 //else {
                 //    window[hiddenCb].apply(null, [$(e.currentTarget), elem ? elem.rdata : undefined]);
                 //}
             }
+
+            //remove the last elem (we don't need it anymore')
+            $modals.pop();
+            counter--;
+
             $mw.find("div.modal-content").html("");
 
         });
-    }
+    };
 
 
     var callFunc = function (cb, $mw, args) {
@@ -140,7 +142,8 @@ window.bscom.modals = (function () {
                     cb.apply(null, [$mw, args]);
             }
         }
-    }
+    };
+
     var showModal = function () {
 
         var elem = getCurrent();
@@ -162,7 +165,7 @@ window.bscom.modals = (function () {
         elem.window.modal('show');
         return elem.window;
 
-    }
+    };
 
     var merge = function (obj1, obj2) {
 
@@ -171,7 +174,7 @@ window.bscom.modals = (function () {
         }
 
         return obj1;
-    }
+    };
 
 
     var postbackData = function (data) {
@@ -189,7 +192,7 @@ window.bscom.modals = (function () {
 
 
         }
-    }
+    };
 
 
     var exports = {
