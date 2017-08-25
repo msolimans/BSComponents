@@ -114,13 +114,9 @@
         <div class="col-md-6">
             Size of modal window simplified using <code>data-sz</code> or <code>data-size</code>
             <code class=" card card-body">
-                $("#ajax_simple").click(function (e) {
+                $("#simple").click(function (e) {
                 e.preventDefault();
-
-                $.get("../resource.html", function (data) {
-                bscom.modals.simple("Remote", data);
-                });
-
+                bscom.modals.simple("Title", "Here I'm simple &lt;button class='btn btn-danger' onclick='bscom.modals.close();'&gt;Close Me!&lt;/button&gt;");
                 });
             </code>
             <br/>
