@@ -28,11 +28,10 @@ window.bscom.modals = (function () {
     var injectModalInfo = function ($contentDiv, title, body) {
 
         $contentDiv.html(
-
             '<div class="modal-header">' +
-            '<h3 class="modal-title">' +
+            '<h5 class="modal-title">' +
             title + //where the title should be injected
-            '</h3>' +
+            '</h5>' +
             '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
             '<span aria-hidden="true">&times;</span>' +
             '</button>' +
@@ -61,6 +60,8 @@ window.bscom.modals = (function () {
                 //    $modalDialog.css('width', $(window).width() * 0.60);
                 //}
                 $modalDialog.removeClass("modal-xs").removeClass("modal-sm").removeClass("modal-md").removeClass("modal-lg").removeClass("modal-xl");
+
+                getCurrent().size = getCurrent().size || "md";
 
                 switch (getCurrent().size.toLowerCase()) {
 
@@ -240,14 +241,14 @@ window.bscom.modals = (function () {
         exports.close();
     });
 
-    $(document).on("click", "*[data-toggle='modal']", function () {
+    var onModalBtnClick = function ($this) {
         //data-ajax                 (bring up the ajax url and display the results inside the modal)
         //data-title                title of the popup to be displayed
         //data-message              message of the popup to be displayed (in case we did not specify ajax)
         //data-callback             (called after shown)
         //data-hidden-callback      (called after closed)
         //data-...                  (Any other data that need to be populated to the ajax url 'form' - it will be pushed automatically and displayed in the inputs there - keep the names consistent to work correctly)
-        var $this = $(this);
+
         var $data = {};
         $.extend($data, $this.data());
 
@@ -261,8 +262,9 @@ window.bscom.modals = (function () {
         var ajax = $data.ajax || null;
         delete $data.ajax;
 
-        var body = $data.message || null;
+        var body = $data.message || $data.body || null;
         delete $data.body;
+        delete $data.message;
 
         var cb = $data.callback || $data.cb || undefined;
         delete $data.callback;
@@ -271,7 +273,6 @@ window.bscom.modals = (function () {
         var hcb = $data.hiddenCallback || $data.hCb || undefined;
         delete $data.hiddenCallback;
         delete $data.hCb;
-
 
 
         if (!ajax && !body)
@@ -293,7 +294,15 @@ window.bscom.modals = (function () {
             exports.show(title, body, size, $data, cb, hcb);
         }
 
+
+    };
+
+
+    $(document).on('click', '*[data-toggle="modal"]', function () {
+        var $this = $(this);
+        onModalBtnClick($this);
     });
+
 
     return exports;
 

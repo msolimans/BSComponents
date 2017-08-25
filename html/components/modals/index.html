@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple</title>
+
+    <link rel="stylesheet" href="../../../bower_components/bootstrap/dist/css/bootstrap.css">
+
+
+    <script src="../../../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../../../bower_components/tether/dist/js/tether.js"></script>
+    <script src="../../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+
+</head>
+<body>
+
+<div class="container">
+    <h2>Modals</h2>
+
+    <br/>
+    <h5>Simple, Via Data Attributes </h5>
+    <div class="row">
+        <div class="col-md-6">
+            Simple Modal with no code at all, just simple anchor with some data elements, all it needs is to add <code>data-toggle="modal"</code>
+            and <code>data-title</code> and <code>data-message|data-body</code>
+
+            <code class="card card-body">
+                &lt;a data-toggle="modal" data-title="Simple" data-body="Hello World" href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
+            </code>
+            <br/>
+            <a data-toggle="modal" data-title="Simple" data-body="Hello World" href="#"
+               class="btn btn-primary">Simple</a>
+
+        </div>
+
+
+        <div class="col-md-6">
+            Styled content can be added/wrapped inside <code>data-body</code> atribute
+            <code class=" card card-body">
+                &lt;a data-toggle="modal" data-title="Simple" data-body="Hello World" href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
+            </code>
+            <br/>
+            <a data-toggle="modal" data-title="Simple"
+               data-body="<h3>Hello World</h3><p><div class='bg bg-info'>this is styled content</div>" href="#"
+               class="btn btn-primary">Styled Content</a>
+        </div>
+
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-6">
+            Call backs can be added easily via data elements: <code>data-callback</code> and
+            <code>data-hidden-callback</code>
+            <code class=" card card-body">
+                &lt;a data-toggle="modal" data-title="Callback" data-body="Hello World" data-callback="displayed"
+                data-hidden-cb="completed" href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
+            </code>
+            <br/>
+            <a data-toggle="modal" data-title="Simple" data-callback="displayed" data-hidden-callback="completed"
+               data-body="<h3>Hello World</h3>" href="#"
+               class="btn btn-primary">Callbacks</a>
+        </div>
+
+        <div class="col-md-6">
+            Call backs can be added easily
+            <code class=" card card-body">
+                &lt;a data-toggle="modal" data-title="Callback" data-body="Hello World"
+                data-hidden-callback="completed_params" href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
+            </code>
+            <br/>
+            <a data-toggle="modal" data-title="Simple" data-hidden-callback="completed_params"
+               data-body="<h5>Close me now and It will fire a function named completed_params with passing this form back to parent or caller</h5>"
+               href="#"
+               class="btn btn-primary">Callback [access to form]</a>
+        </div>
+    </div>
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-6">
+            Size of modal window simplified using <code>data-sz</code> or <code>data-size</code>
+            <code class=" card card-body">
+                &lt;a data-toggle="modal" data-title="Callback" data-body="Hello World" data-sz="sm|md|lg" href="#"
+                class="btn btn-primary"&gt;Simple&lt;/a&gt;
+            </code>
+            <br/>
+
+            <a data-toggle="modal" data-title="Ajax calls" data-body="Small Content" data-size="sm" href="#"
+               class="btn btn-primary">Small</a>
+            <a data-toggle="modal" data-title="Ajax calls" data-body="Medium Content" data-size="md" href="#"
+               class="btn btn-primary">Medium</a>
+            <a data-toggle="modal" data-title="Ajax calls" data-body="Large Content" data-size="lg" href="#"
+               class="btn btn-primary">large</a>
+
+        </div>
+
+        <div class="col-md-6">
+            Ajax Simplified via data-ajax
+            <code class=" card card-body">
+                &lt;a data-toggle="modal" data-title="Callback" data-ajax="../resource.html" href="#" class="btn
+                btn-primary"&gt;Simple&lt;/a&gt;
+            </code>
+            <br/>
+            <a data-toggle="modal" data-title="Simple" data-ajax="../resource.html" href="#" class="btn btn-primary">Simple
+                Ajax</a>
+        </div>
+    </div>
+    <br/>
+    <hr/>
+
+    <h5>Simple, Via Javascript</h5>
+    <div class="row">
+        <div class="col-md-6">
+            Size of modal window simplified using <code>data-sz</code> or <code>data-size</code>
+            <code class=" card card-body">
+                $("#ajax_simple").click(function (e) {
+                e.preventDefault();
+
+                $.get("../resource.html", function (data) {
+                bscom.modals.simple("Remote", data);
+                });
+
+                });
+            </code>
+            <br/>
+
+            <a id="simple" href="#" class="btn btn-primary">Simple JS</a>
+
+
+        </div>
+
+        <div class="col-md-6">
+            Ajax Simplified via script, by default size is small when calling <code>simple()</code> however if you
+            called <code>show()</code> or <code>open()</code> default size is medium
+            <div class="row">
+                <div class="col-md-6"><code class=" card card-body">
+                    $("#ajax_simple").click(function (e) {
+                    e.preventDefault();
+
+                    $.get("../cresource.html", function (data) {
+                    bscom.modals.simple("Remote", data);
+                    });
+
+                    });
+                </code>
+                    <br /><a id="ajax_simple" href="#" class="btn btn-primary">Simple Ajax</a>
+                </div>
+                <div class="col-md-6">
+                    <code class=" card card-body">
+                    $("#ajax").click(function (e) {
+                    e.preventDefault();
+
+                    $.get("../resource.html", function (data) {
+                    bscom.modals.open("Remote", data, "md", {} ,function(){
+                    alert("test");
+
+                    }, function($mw){
+                    alert("I am done, " + $mw.find(".modal-body").html())
+                    });
+                    });
+
+                    })
+                </code> <br /><a id="ajax" href="#" class="btn btn-primary">Callback Ajax</a>
+                </div>
+
+            </div>
+            <br/>
+
+
+        </div>
+    </div>
+
+
+</div>
+
+
+<script src="../../../js/components/modals/bscom.modals.js"></script>
+<script>
+
+    function displayed() {
+        alert("I am displayed");
+    }
+
+    function completed() {
+        alert("I am done");
+    }
+
+    function completed_params($mw) {
+        alert("I am done, all form: " + $($mw).find(".modal-body").html());
+    }
+
+
+    $(document).ready(function () {
+        $("#simple").click(function (e) {
+            e.preventDefault();
+            bscom.modals.simple("Title", "Here I'm simple <button class='btn btn-danger' onclick='bscom.modals.close();'>Close Me!</button>");
+        });
+
+        $("#ajax_simple").click(function (e) {
+            e.preventDefault();
+
+            $.get("../cresource.html", function (data) {
+                bscom.modals.simple("Remote", data);
+            });
+
+        });
+
+        $("#ajax").click(function (e) {
+            e.preventDefault();
+
+            $.get("../resource.html", function (data) {
+                bscom.modals.open("Remote", data, "md", {}, function () {
+                    alert("test");
+
+                }, function ($mw) {
+                    alert("I am done, " + $mw.find(".modal-body").html())
+                });
+            });
+
+        })
+
+    });
+
+
+</script>
+</body>
+</html>

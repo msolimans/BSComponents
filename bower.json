@@ -1,0 +1,21 @@
+{
+  "name": "BSComponents",
+  "homepage": "https://github.com/msolimans/BSComponents",
+  "authors": [
+    "Muhammad Soliman <m.solimanz@hotmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "bootstrap": "v4.0.0-alpha.6"
+  }
+}
