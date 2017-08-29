@@ -18,6 +18,8 @@ window.bscom.modals = (function () {
     var getCurrent = function () {
         if (counter > 0)
             return $modals[counter - 1];
+
+        return undefined;
     };
 
     //set the value of the last elem in the array
@@ -32,11 +34,13 @@ window.bscom.modals = (function () {
 
         switch(type.toLowerCase()){
             case "info":
-                return "alert alert-info";
+                return " alert alert-info";
             case "warning":
-                return "alert alert-warning";
+                return " alert alert-warning";
             case "danger":
-                return "alert alert-danger";
+                return " alert alert-danger";
+            case "success":
+                return " alert alert-success";
             default:
                 return "";
         }
@@ -51,7 +55,7 @@ window.bscom.modals = (function () {
         $div.empty();
 
         $div.html(
-            '<div class="modal-header"' + getClassByType(elem.type) + '>' +
+            '<div class="modal-header' + getClassByType(elem.type) + '">' +
             '<h5 class="modal-title">' +
             elem.title + //where the title should be injected
             '</h5>' +
@@ -213,8 +217,141 @@ window.bscom.modals = (function () {
         }
     };
 
+    /*Event Handlers ------------------------------------------------------------------------------------------------*/
+    $(document).on("click", ".modal-cancel", function () {
+        exports.close();
+    });
 
+    $(document).on('click', '*[data-toggle="modal"]', function () {
+        var $this = $(this);
+        onModalBtnClick($this);
+    });
+    /*---------------------------------------------------------------------------------------------------------------*/
+
+
+    var onModalBtnClick = function ($this) {
+        //data-ajax                 (bring up the ajax url and display the results inside the modal)
+        //data-title                title of the popup to be displayed
+        //data-message              message of the popup to be displayed (in case we did not specify ajax)
+        //data-callback             (called after shown)
+        //data-hidden-callback      (called after closed)
+        //data-...                  (Any other data that need to be populated to the ajax url 'form' - it will be pushed automatically and displayed in the inputs there - keep the names consistent to work correctly)
+
+        var $data = {};
+        $.extend($data, $this.data());
+
+        var title = $data.title || "Info";
+        delete $data.title;
+
+        var size = $data.size || $data.sz || "md";
+        delete $data.size;
+        delete $data.sz;
+
+        var ajax = $data.ajax || null;
+        delete $data.ajax;
+
+        var body = $data.message || $data.body || null;
+        delete $data.body;
+        delete $data.message;
+
+        var cb = $data.callback || $data.cb || undefined;
+        delete $data.callback;
+        delete $data.cb;
+
+        var hcb = $data.hiddenCallback || $data.hCb || undefined;
+        delete $data.hiddenCallback;
+        delete $data.hCb;
+
+
+        if (!ajax && !body)
+            body = "Please specify either ajax url [data-ajax] or message [data-message|data-body] to be displayed in this window";
+
+        if (!body) {
+            //call ajax and fill body
+            $.get(ajax, function (response) {
+                body = response;
+
+                //must be here to make sure response promise is ready after ajax call
+                exports.show(title, body, size, $data, cb, hcb);
+
+            });
+        }
+
+        else {
+            //display message directly
+            exports.show(title, body, size, $data, cb, hcb);
+        }
+
+
+    };
+
+
+    //outside world
     var exports = {
+        display: function(options){
+            var opts = {
+                title: "Info",
+                body: "Please specify either ajax url [data-ajax] or message [data-message|data-body] to be displayed in this window",
+                size: "md",
+                type: "info",
+                data: {},
+                rdata: {},
+                cb: undefined,
+                hcb: undefined,
+                window: undefined
+            };
+
+            $.extend(opts, options);
+
+            //add new modal to modals array with all properties required
+            var $temp = $modal.clone(), cid = name + counter++;
+
+            $temp.attr("id", cid);
+            opts.id = cid;
+            opts.window = $temp;
+
+            $modals.push(opts);
+
+            showModal();
+
+        },
+
+        //buttons: [{title: "Yes", class: "btn btn-success", action: function(){}}]
+        confirm: function(title, body, buttons){
+            var defaults = {
+                "Yes": {class: "btn btn-primary", action: undefined},
+                "No": {class: "btn btn-secondary", action: undefined}
+            };
+
+            $.extend(defaults,  buttons);
+
+            return exports.display({
+                title: title,
+                body: body,
+                type: "danger"
+            });
+        },
+        warning: function(title, body){
+            return exports.display({
+                title: title,
+                body: body,
+                type: "warning"
+            });
+        },
+        success: function(title, body){
+            return exports.display({
+                title: title,
+                body: body,
+                type: "success"
+            });
+        },
+        info: function (title, body) {
+            return exports.display({
+                title: title,
+                body: body
+            });
+        },
+
         show: function (title, body, size, data, cb, hiddenCb) {
             //add new modal to modals array with all properties required
             var $temp = $modal.clone(), cid = name + counter++;
@@ -253,73 +390,6 @@ window.bscom.modals = (function () {
             postbackData(data);
         }
     };
-
-
-    $(document).on("click", ".modal-cancel", function () {
-        exports.close();
-    });
-
-    var onModalBtnClick = function ($this) {
-        //data-ajax                 (bring up the ajax url and display the results inside the modal)
-        //data-title                title of the popup to be displayed
-        //data-message              message of the popup to be displayed (in case we did not specify ajax)
-        //data-callback             (called after shown)
-        //data-hidden-callback      (called after closed)
-        //data-...                  (Any other data that need to be populated to the ajax url 'form' - it will be pushed automatically and displayed in the inputs there - keep the names consistent to work correctly)
-
-        var $data = {};
-        $.extend($data, $this.data());
-
-        var title = $data.title || "Info";
-        delete $data.title;
-
-        var size = $data.size || $data.sz || "md";
-        delete $data.size;
-        delete $data.sz;
-
-        var ajax = $data.ajax || null;
-        delete $data.ajax;
-
-        var body = $data.message || $data.body || null;
-        delete $data.body;
-        delete $data.message;
-
-        var cb = $data.callback || $data.cb || undefined;
-        delete $data.callback;
-        delete $data.cb;
-
-        var hcb = $data.hiddenCallback || $data.hCb || undefined;
-        delete $data.hiddenCallback;
-        delete $data.hCb;
-
-
-        if (!ajax && !body)
-            body = "Please specify either ajax url [data-ajax] or message [data-message] to be displayed in this window";
-
-        if (!body) {
-            //call ajax and fill body
-            $.get(ajax, function (response) {
-                body = response;
-
-                //must be here to make sure response promise is ready after ajax call
-                exports.show(title, body, size, $data, cb, hcb);
-
-            });
-        }
-
-        else {
-            //display message directly
-            exports.show(title, body, size, $data, cb, hcb);
-        }
-
-
-    };
-
-
-    $(document).on('click', '*[data-toggle="modal"]', function () {
-        var $this = $(this);
-        onModalBtnClick($this);
-    });
 
 
     return exports;
