@@ -18,33 +18,58 @@ window.bscom.modals = (function () {
     var getCurrent = function () {
         if (counter > 0)
             return $modals[counter - 1];
-    }
+    };
 
+    //set the value of the last elem in the array
     var setCurrent = function (elem) {
         if (counter > 0)
             $modals[counter - 1] = elem;
-    }
+    };
 
-    var injectModalInfo = function ($contentDiv, title, body) {
+    var getClassByType = function(type){
+        if(!type)
+            return "";
 
-        $contentDiv.html(
-            '<div class="modal-header">' +
+        switch(type.toLowerCase()){
+            case "info":
+                return "alert alert-info";
+            case "warning":
+                return "alert alert-warning";
+            case "danger":
+                return "alert alert-danger";
+            default:
+                return "";
+        }
+    };
+
+    var injectModalInfo = function (elem) {
+
+
+        var $div = elem.window.find("div.modal-content");
+
+        //clear previous content if exists
+        $div.empty();
+
+        $div.html(
+            '<div class="modal-header"' + getClassByType(elem.type) + '>' +
             '<h5 class="modal-title">' +
-            title + //where the title should be injected
+            elem.title + //where the title should be injected
             '</h5>' +
             '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
             '<span aria-hidden="true">&times;</span>' +
             '</button>' +
             '</div>' +
             '<div class="modal-body">' +
-            body + //where the real content of the modal should be injected
+            elem.body + //where the real content of the modal should be injected
             '</div>'
         );
 
-    }
+    };
 
 
-    var registerEvents = function ($mw, data, cb, hiddenCb) {
+    var registerEvents = function (elem) {
+
+        var $mw = elem.window, data = elem.data, cb = elem.cb, hiddenCb = elem.hcb;
 
         //register shown event, set the width of popup according to the size md, lg
         $mw.off('show.bs.modal').on('show.bs.modal', function (e) {
@@ -149,21 +174,14 @@ window.bscom.modals = (function () {
 
         var elem = getCurrent();
 
-        var $div = elem.window.find("div.modal-content");
-
-        //type
-        //remove previous content
-        $div.empty();
-
-        //set the content here inside the modal
-        //$div.html(responseText);
-        injectModalInfo($div, elem.title, elem.body);
+        injectModalInfo(elem);
 
         //register events for callbacks and sizes
-        registerEvents(elem.window, elem.data, elem.cb, elem.hcb);
+        registerEvents(elem);
 
         //show the modal window and return it for further processing if needed
         elem.window.modal('show');
+
         return elem.window;
 
     };
