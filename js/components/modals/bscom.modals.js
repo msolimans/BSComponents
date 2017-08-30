@@ -135,13 +135,19 @@ window.bscom.modals = (function () {
         }
     };
 
+    var bindKb = function(){
+
+            alert("test");
+
+
+    };
 
     var registerEvents = function (elem) {
 
         var $mw = elem.window, data = elem.data, cb = elem.cb, hiddenCb = elem.hcb;
 
         //register shown event, set the width of popup according to the size md, lg
-        $mw.off('show.bs.modal').on('show.bs.modal', function (e) {
+        $mw.off("show.bs.modal").on("show.bs.modal", function (e) {
 
             if ($(this)) {
                 var $modalDialog = $(this).find(".modal-dialog");
@@ -174,7 +180,6 @@ window.bscom.modals = (function () {
                         break;
                 }
 
-
                 //populate properties into form automatically otherwise put all remaining data (json format) inside "data" attribute
                 if (data && data.autoPopulate)
                     for (var k in data) {
@@ -195,7 +200,7 @@ window.bscom.modals = (function () {
 
         //after shown event, set the height of popup and call callback function
         $mw.off("shown.bs.modal").on("shown.bs.modal", function (e) {
-            $(this).find('.modal-dialog').css('max-height', $(window).height() * 0.90);
+            $(this).find(".modal-dialog").css("max-height", $(window).height() * 0.90);
 
             callFunc(cb, $(e.currentTarget));
 
@@ -230,7 +235,11 @@ window.bscom.modals = (function () {
         registerEvents(elem);
 
         //show the modal window and return it for further processing if needed
-        elem.window.modal('show');
+        elem.window.modal({
+            show: true,
+            keyboard: elem.keyoard || elem.kb || true,
+            focus: true
+        });
 
         return elem.window;
 
@@ -332,6 +341,9 @@ window.bscom.modals = (function () {
         delete $data.hiddenCallback;
         delete $data.hCb;
 
+        /*data-kb, data-type="confirm|info|warning|simple|err" data-buttons-ok="functionName" data-buttons-ok-class="className"  data-buttons-cancel="action" data-buttons-cancel-class="" */
+        var kb = $data.kb || $data.keyboard || true;
+        delete $data.kb; delete $data.keyboard;
 
         if (!ajax && !body)
             body = "Please specify either ajax url [data-ajax] or message [data-message|data-body] to be displayed in this window";
@@ -363,7 +375,7 @@ window.bscom.modals = (function () {
                 okay: {}
             };
 
-        if (okBtn && typeof okBtn == 'function') {
+        if (okBtn && typeof okBtn == "function") {
             var temp = okBtn;
 
             okBtn.okay = {};
@@ -412,7 +424,7 @@ window.bscom.modals = (function () {
             }
 
             //in case passed event handlers (both functions or functionNames)
-            if (btns && secbtns && (typeof btns === 'function' || typeof btns === 'string') && (typeof secbtns === 'function' || typeof secbtns === 'string')) {
+            if (btns && secbtns && (typeof btns === "function" || typeof btns === "string") && (typeof secbtns === "function" || typeof secbtns === "string")) {
                 var temp = btns;
                 btns = {};
                 btns.Yes = {};
@@ -420,7 +432,7 @@ window.bscom.modals = (function () {
 
                 btns.No = {};
                 btns.No.action = secbtns;
-            } else if (btns && typeof btns == 'function') {
+            } else if (btns && typeof btns == "function") {
                 var temp = btns;
 
                 btns.Yes = {};
@@ -502,7 +514,7 @@ window.bscom.modals = (function () {
         },
         hide: function () {
             var $cmodal = getCurrent().window;
-            $cmodal.modal('hide');
+            $cmodal.modal("hide");
         },
         //same as hide (just naming)
         close: function () {
