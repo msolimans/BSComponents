@@ -68,10 +68,12 @@ window.bscom.modals = (function () {
             var result = '<div class="modal-footer">';
             for(var button in elem.buttons){
                 result += '<button ' +
-                    'data-action="' + button +
-                    '" type="button"' +
+                    ' data-action="' + button + '"' +
+                    ' type="button"' +
                     ' class="' + (elem.buttons[button].class? elem.buttons[button].class: getDefaultClass(button) ) + '"' +
-                    '">' + toTitleCase(button) + '</button>';
+                    '>' +
+                    toTitleCase(button) +
+                    '</button>';
             }
 
             result += '</div>';
@@ -282,6 +284,10 @@ window.bscom.modals = (function () {
         exports.close();
 
         var button = elem.buttons[$(this).data("action")];
+
+        if(!button)
+            return;
+
         switch(typeof button){
             case "object":
                 callFunc(button.action);
@@ -419,8 +425,7 @@ window.bscom.modals = (function () {
                     btns.Yes = {};
                     btns.Yes.action = temp;
 
-                    btns.No = {}
-                    btns.No.action = function(){exports.close()};
+                    btns.No = {};
                 }
 
             }
