@@ -136,7 +136,8 @@ window.bscom.modals = (function () {
     };
 
     var bindKb = function(){
-
+            //check select2 issue wth tab-index=-1|0|1
+            //https://www.bountysource.com/issues/1098490-select2-bootstrap-modal-weird-scrolling
             alert("test");
 
 
