@@ -28,11 +28,11 @@ window.bscom.modals = (function () {
             $modals[counter - 1] = elem;
     };
 
-    var getClassByType = function(type){
-        if(!type)
+    var getClassByType = function (type) {
+        if (!type)
             return "";
 
-        switch(type.toLowerCase()){
+        switch (type.toLowerCase()) {
             case "info":
                 return " alert alert-info";
             case "warning":
@@ -46,31 +46,32 @@ window.bscom.modals = (function () {
         }
     };
 
-    var getDefaultClass = function(btnName){
-        switch (btnName.toLowerCase()){
+    var getDefaultClass = function (type, btnName) {
+        switch (btnName.toLowerCase()) {
             case "ok":
             case "okay":
             case "yes":
-                return "btn btn-primary";
+                return "btn btn-" + type;
             default:
                 return "btn btn-secondary";
         }
     };
 
-    var toTitleCase = function (str)
-    {
-        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    var toTitleCase = function (str) {
+        return str.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
     };
 
-    var injectButtons = function(elem){
+    var injectButtons = function (elem) {
 
-        if(elem.buttons){
+        if (elem.buttons) {
             var result = '<div class="modal-footer">';
-            for(var button in elem.buttons){
+            for (var button in elem.buttons) {
                 result += '<button ' +
                     ' data-action="' + button + '"' +
                     ' type="button"' +
-                    ' class="' + (elem.buttons[button].class? elem.buttons[button].class: getDefaultClass(button) ) + '"' +
+                    ' class="' + (elem.buttons[button].class ? elem.buttons[button].class : getDefaultClass(elem.type, button) ) + '"' +
                     '>' +
                     toTitleCase(button) +
                     '</button>';
@@ -95,7 +96,7 @@ window.bscom.modals = (function () {
 
         $div.html(
             '<div class="modal-header' + getClassByType(elem.type) + '">' +
-            '<h5 class="modal-title">' +
+            '<h5 class="modal-title">' + //text text-' + elem.type +
             elem.title + //where the title should be injected
             '</h5>' +
             '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
@@ -120,7 +121,7 @@ window.bscom.modals = (function () {
                 var ncb = window[cb];
 
                 //the whole function is passed as a string
-                if(!ncb) {
+                if (!ncb) {
                     //hookup the code in a closure to disable conflicts and global access
                     eval('(function(){ var f = ' + cb + '; f();})();');
                     return;
@@ -133,8 +134,6 @@ window.bscom.modals = (function () {
             }
         }
     };
-
-
 
 
     var registerEvents = function (elem) {
@@ -221,8 +220,6 @@ window.bscom.modals = (function () {
     };
 
 
-
-
     var showModal = function () {
 
         var elem = getCurrent();
@@ -276,7 +273,7 @@ window.bscom.modals = (function () {
         onModalBtnClick($this);
     });
 
-    $(document).on("click", "*[data-action]", function(){
+    $(document).on("click", "*[data-action]", function () {
         //var fnString = $(this).data("action");
 
         var elem = getCurrent();
@@ -285,10 +282,10 @@ window.bscom.modals = (function () {
 
         var button = elem.buttons[$(this).data("action")];
 
-        if(!button)
+        if (!button)
             return;
 
-        switch(typeof button){
+        switch (typeof button) {
             case "object":
                 callFunc(button.action);
                 break;
@@ -359,9 +356,26 @@ window.bscom.modals = (function () {
     };
 
 
+
+    var generateOkay = function (okBtn) {
+        if(!okBtn)
+            return {
+                okay: {}
+            };
+
+        if (okBtn && typeof okBtn == 'function') {
+            var temp = okBtn;
+
+            okBtn.okay = {};
+            okBtn.okay.action = temp;
+
+        }
+        return okBtn;
+    };
+
     //outside world
     var exports = {
-        display: function(options){
+        display: function (options) {
             var opts = {
                 title: "Info",
                 body: "Please specify either ajax url [data-ajax] or message [data-message|data-body] to be displayed in this window",
@@ -392,42 +406,27 @@ window.bscom.modals = (function () {
         //e.g. buttons: { Yes: {class: "btn btn-success", action: function(){ ... } }, No: { action: function(){ ... } } }
         //e.g. buttons: { Yes: function(){alert('test');} }
         //e.g. buttons: { Yes: "myFunctionName" }
-        confirm: function(title, body, btns, secbtns){
-            if(!btns) {
-                btns = {
-                    Yes: {
-                        class: "btn btn-primary", action: function () {
-                            exports.postData({clicked: "Yes"});
-                            exports.close();
-                        }
-                    },
-                    No: {
-                        class: "btn btn-secondary", action: function () {
-                            exports.postData({clicked: "No"});
-                            exports.close();
-                        }
-                    }
-                };
+        confirm: function (title, body, btns, secbtns) {
+            if (!btns) {
+                return exports.info(title, body);
             }
-            else{
-                //in case passed event handlers (both functions or functionNames)
-                if(btns && secbtns && (typeof btns === 'function' || typeof btns === 'string') && (typeof secbtns === 'function' || typeof secbtns === 'string')){
-                        var temp = btns;
-                        btns = {};
-                        btns.Yes = {};
-                        btns.Yes.action = temp;
 
-                        btns.No = {};
-                        btns.No.action = secbtns;
-                }else if(btns && typeof btns == 'function'){
-                    var temp = btns;
+            //in case passed event handlers (both functions or functionNames)
+            if (btns && secbtns && (typeof btns === 'function' || typeof btns === 'string') && (typeof secbtns === 'function' || typeof secbtns === 'string')) {
+                var temp = btns;
+                btns = {};
+                btns.Yes = {};
+                btns.Yes.action = temp;
 
-                    btns.Yes = {};
-                    btns.Yes.action = temp;
+                btns.No = {};
+                btns.No.action = secbtns;
+            } else if (btns && typeof btns == 'function') {
+                var temp = btns;
 
-                    btns.No = {};
-                }
+                btns.Yes = {};
+                btns.Yes.action = temp;
 
+                btns.No = {};
             }
 
 
@@ -438,24 +437,43 @@ window.bscom.modals = (function () {
                 type: "danger"
             });
         },
-        warning: function(title, body){
+        warning: function (title, body, btn) {
             return exports.display({
                 title: title,
                 body: body,
+                buttons: generateOkay(btn),
                 type: "warning"
             });
         },
-        success: function(title, body){
+        success: function (title, body, btn) {
             return exports.display({
                 title: title,
                 body: body,
+                buttons: generateOkay(btn),
                 type: "success"
             });
         },
-        info: function (title, body) {
+        info: function (title, body, btn) {
             return exports.display({
                 title: title,
+                buttons: generateOkay(btn),
                 body: body
+            });
+        },
+        err: function (title, body, btn) {
+            return exports.display({
+                title: title,
+                buttons: generateOkay(btn),
+                body: body,
+                type: "danger"
+            });
+        },
+        simple: function (title, body, btn) {
+            return exports.display({
+                title: title,
+                buttons: generateOkay(btn),
+                body: body,
+                type: "primary"
             });
         },
 
@@ -481,9 +499,6 @@ window.bscom.modals = (function () {
         //same as show (just naming)
         open: function (title, body, size, data, cb, hiddenCb) {
             return exports.show(title, body, size, data, cb, hiddenCb);
-        },
-        simple: function (title, body) {
-            return exports.show(title, body, "sm");
         },
         hide: function () {
             var $cmodal = getCurrent().window;
