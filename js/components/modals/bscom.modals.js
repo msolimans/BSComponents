@@ -65,11 +65,28 @@ window.bscom.modals = (function () {
             '</div>' +
             '<div class="modal-body">' +
             elem.body + //where the real content of the modal should be injected
-            '</div>'
+            '</div>' +
+            injectButtons(elem) //where buttons are going in the footer
         );
 
     };
 
+    var injectButtons = function(elem){
+
+        if(elem.buttons){
+            var result = '<div class="modal-footer">';
+                for(var button in elem.buttons){
+                    result += '<button type="button" class="' + elem.buttons[button].class + '">' + button + '</button>';
+                }
+
+                result += '</div>';
+
+            return result;
+        }
+
+        return '';
+
+    };
 
     var registerEvents = function (elem) {
 
@@ -293,12 +310,12 @@ window.bscom.modals = (function () {
                 title: "Info",
                 body: "Please specify either ajax url [data-ajax] or message [data-message|data-body] to be displayed in this window",
                 size: "md",
-                type: "info",
-                data: {},
-                rdata: {},
-                cb: undefined,
-                hcb: undefined,
-                window: undefined
+                type: "info"//,
+                //data: {},
+                //rdata: {},
+                //cb: undefined,
+                //hcb: undefined,
+                //window: undefined
             };
 
             $.extend(opts, options);
@@ -316,18 +333,29 @@ window.bscom.modals = (function () {
 
         },
 
-        //buttons: [{title: "Yes", class: "btn btn-success", action: function(){}}]
+        //e.g. buttons: { Yes: {class: "btn btn-success", action: function(){ ... } }, No: { action: function(){ ... } } }
         confirm: function(title, body, buttons){
-            var defaults = {
-                "Yes": {class: "btn btn-primary", action: undefined},
-                "No": {class: "btn btn-secondary", action: undefined}
-            };
-
-            $.extend(defaults,  buttons);
+            if(!buttons) {
+                buttons = {
+                    Yes: {
+                        class: "btn btn-primary", action: function () {
+                            exports.postData({clicked: "Yes"});
+                            exports.close();
+                        }
+                    },
+                    No: {
+                        class: "btn btn-secondary", action: function () {
+                            exports.postData({clicked: "Yes"});
+                            exports.close();
+                        }
+                    }
+                };
+            }
 
             return exports.display({
                 title: title,
                 body: body,
+                buttons: buttons,
                 type: "danger"
             });
         },
