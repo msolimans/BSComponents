@@ -46,8 +46,45 @@ window.bscom.modals = (function () {
         }
     };
 
-    var injectModalInfo = function (elem) {
+    var getDefaultClass = function(btnName){
+        switch (btnName.toLowerCase()){
+            case "ok":
+            case "okay":
+            case "yes":
+                return "btn btn-primary";
+            default:
+                return "btn btn-secondary";
+        }
+    };
 
+    var toTitleCase = function (str)
+    {
+        return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    };
+
+    var injectButtons = function(elem){
+
+        if(elem.buttons){
+            var result = '<div class="modal-footer">';
+            for(var button in elem.buttons){
+                result += '<button ' +
+                    'data-action="' + button +
+                    '" type="button"' +
+                    ' class="' + (elem.buttons[button].class? elem.buttons[button].class: getDefaultClass(button) ) + '"' +
+                    '">' + toTitleCase(button) + '</button>';
+            }
+
+            result += '</div>';
+
+            return result;
+        }
+
+        return '';
+
+    };
+
+
+    var injectModalInfo = function (elem) {
 
         var $div = elem.window.find("div.modal-content");
 
@@ -71,22 +108,32 @@ window.bscom.modals = (function () {
 
     };
 
-    var injectButtons = function(elem){
+    var callFunc = function (cb, $mw, args) {
+        if (cb) {
+            if (typeof cb === 'function')
+                cb($mw, args);
+            //string
+            else {
+                //call the function name from the string through the window (safer than eval())
+                var ncb = window[cb];
 
-        if(elem.buttons){
-            var result = '<div class="modal-footer">';
-                for(var button in elem.buttons){
-                    result += '<button type="button" class="' + elem.buttons[button].class + '">' + button + '</button>';
+                //the whole function is passed as a string
+                if(!ncb) {
+                    //hookup the code in a closure to disable conflicts and global access
+                    eval('(function(){ var f = ' + cb + '; f();})();');
+                    return;
                 }
 
-                result += '</div>';
+                cb = ncb;
 
-            return result;
+                if (cb)
+                    cb.apply(null, [$mw, args]);
+            }
         }
-
-        return '';
-
     };
+
+
+
 
     var registerEvents = function (elem) {
 
@@ -160,12 +207,6 @@ window.bscom.modals = (function () {
                 var elem = getCurrent();
 
                 callFunc(hiddenCb, $(e.currentTarget), elem ? elem.rdata : undefined);
-
-                //if (typeof hiddenCb === 'function')
-                //    hiddenCb($(e.currentTarget), elem ? elem.rdata : undefined);
-                //else {
-                //    window[hiddenCb].apply(null, [$(e.currentTarget), elem ? elem.rdata : undefined]);
-                //}
             }
 
             //remove the last elem (we don't need it anymore')
@@ -178,18 +219,7 @@ window.bscom.modals = (function () {
     };
 
 
-    var callFunc = function (cb, $mw, args) {
-        if (cb) {
-            if (typeof cb === 'function')
-                cb($mw, args);
-            else {
-                //call the function from the string through the window (safer than eval())
-                cb = window[cb];
-                if (cb)
-                    cb.apply(null, [$mw, args]);
-            }
-        }
-    };
+
 
     var showModal = function () {
 
@@ -239,10 +269,30 @@ window.bscom.modals = (function () {
         exports.close();
     });
 
-    $(document).on('click', '*[data-toggle="modal"]', function () {
+    $(document).on("click", "*[data-toggle='modal']", function () {
         var $this = $(this);
         onModalBtnClick($this);
     });
+
+    $(document).on("click", "*[data-action]", function(){
+        //var fnString = $(this).data("action");
+
+        var elem = getCurrent();
+
+        exports.close();
+
+        var button = elem.buttons[$(this).data("action")];
+        switch(typeof button){
+            case "object":
+                callFunc(button.action);
+                break;
+            default:
+                //functionName (string) or function
+                callFunc(button);
+                break;
+        }
+    });
+
     /*---------------------------------------------------------------------------------------------------------------*/
 
 
@@ -334,9 +384,11 @@ window.bscom.modals = (function () {
         },
 
         //e.g. buttons: { Yes: {class: "btn btn-success", action: function(){ ... } }, No: { action: function(){ ... } } }
-        confirm: function(title, body, buttons){
-            if(!buttons) {
-                buttons = {
+        //e.g. buttons: { Yes: function(){alert('test');} }
+        //e.g. buttons: { Yes: "myFunctionName" }
+        confirm: function(title, body, btns, secbtns){
+            if(!btns) {
+                btns = {
                     Yes: {
                         class: "btn btn-primary", action: function () {
                             exports.postData({clicked: "Yes"});
@@ -345,17 +397,39 @@ window.bscom.modals = (function () {
                     },
                     No: {
                         class: "btn btn-secondary", action: function () {
-                            exports.postData({clicked: "Yes"});
+                            exports.postData({clicked: "No"});
                             exports.close();
                         }
                     }
                 };
             }
+            else{
+                //in case passed event handlers (both functions or functionNames)
+                if(btns && secbtns && (typeof btns === 'function' || typeof btns === 'string') && (typeof secbtns === 'function' || typeof secbtns === 'string')){
+                        var temp = btns;
+                        btns = {};
+                        btns.Yes = {};
+                        btns.Yes.action = temp;
+
+                        btns.No = {};
+                        btns.No.action = secbtns;
+                }else if(btns && typeof btns == 'function'){
+                    var temp = btns;
+
+                    btns.Yes = {};
+                    btns.Yes.action = temp;
+
+                    btns.No = {}
+                    btns.No.action = function(){exports.close()};
+                }
+
+            }
+
 
             return exports.display({
                 title: title,
                 body: body,
-                buttons: buttons,
+                buttons: btns,
                 type: "danger"
             });
         },
