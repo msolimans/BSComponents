@@ -386,7 +386,7 @@ window.bscom.modals = (function () {
         return okBtn;
     };
 
-    //outside world
+
     var exports = {
         display: function (options) {
             var opts = {
@@ -509,24 +509,33 @@ window.bscom.modals = (function () {
             showModal();
 
         },
-        //same as show (just naming)
-        open: function (title, body, size, data, cb, hiddenCb) {
-            return exports.show(title, body, size, data, cb, hiddenCb);
-        },
-        hide: function () {
+
+        close: function () {
             var $cmodal = getCurrent().window;
             $cmodal.modal("hide");
         },
-        //same as hide (just naming)
-        close: function () {
-            exports.hide();
-        },
+
         postData: function (data) {
             postbackData(data);
         }
     };
 
-
-    return exports;
+    //outside world
+    return {
+        close: exports.close,
+        hide: exports.close,
+        postData: exports.postData,
+        open: exports.show,
+        show: exports.show,
+        simple: exports.simple,
+        info: exports.info,
+        inform: exports.info,
+        err: exports.err,
+        error: exports.err,
+        warn: exports.warning,
+        warning: exports.warning,
+        success: exports.success,
+        confirm: exports.confirm
+    };
 
 })();

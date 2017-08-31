@@ -5,168 +5,427 @@
     <title>Simple</title>
 
     <link rel="stylesheet" href="../../../bower_components/bootstrap/dist/css/bootstrap.css">
-
+    <link rel="stylesheet" href="../../../bower_components/highlightjs/styles/github.css">
 
     <script src="../../../bower_components/jquery/dist/jquery.js"></script>
     <script src="../../../bower_components/tether/dist/js/tether.js"></script>
     <script src="../../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
 
+    <script src="../../../bower_components/highlightjs/highlight.pack.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+    <style>
+        pre {
+            margin-bottom: 0px;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
 
 </head>
 <body>
 
 <div class="container">
-    <h2>Modals</h2>
-
-    <br/>
-    <h5>Simple, Via Data Attributes </h5>
     <div class="row">
-        <div class="col-md-6">
-            Simple Modal with no code at all, just simple anchor with some data elements, all it needs is to add <code>data-toggle="modal"</code>
-            and <code>data-title</code> and <code>data-message|data-body</code>
+        <div class="col-12 col-md-3 push-md-9 bd-sidebar">
+            <nav class="bd-links" style="position: fixed">
+                <div class="bd-toc-item">
+                    <a href="#use" class="bd-toc-link"> How to use it? </a>
 
-            <code class="card card-body">
-                &lt;a data-toggle="modal" data-title="Simple" data-body="Hello World" href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
-            </code>
-            <br/>
-            <a data-toggle="modal" data-title="Simple" data-body="Hello World" href="#"
-               class="btn btn-primary">Simple</a>
-
-        </div>
-
-
-        <div class="col-md-6">
-            Styled content can be added/wrapped inside <code>data-body</code> atribute
-            <code class=" card card-body">
-                &lt;a data-toggle="modal" data-title="Simple" data-body="Hello World" href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
-            </code>
-            <br/>
-            <a data-toggle="modal" data-title="Simple"
-               data-body="<h3>Hello World</h3><p><div class='bg bg-info'>this is styled content</div>" href="#"
-               class="btn btn-primary">Styled Content</a>
-        </div>
-
-    </div>
-    <hr/>
-    <div class="row">
-        <div class="col-md-6">
-            Call backs can be added easily via data elements: <code>data-callback</code> and
-            <code>data-hidden-callback</code>
-            <code class=" card card-body">
-                &lt;a data-toggle="modal" data-title="Callback" data-body="Hello World" data-callback="displayed"
-                data-hidden-cb="completed" href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
-            </code>
-            <br/>
-            <a data-toggle="modal" data-title="Simple" data-callback="displayed" data-hidden-callback="completed"
-               data-body="<h3>Hello World</h3>" href="#"
-               class="btn btn-primary">Callbacks</a>
-        </div>
-
-        <div class="col-md-6">
-            Call backs can be added easily
-            <code class=" card card-body">
-                &lt;a data-toggle="modal" data-title="Callback" data-body="Hello World"
-                data-hidden-callback="completed_params" href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
-            </code>
-            <br/>
-            <a data-toggle="modal" data-title="Simple" data-hidden-callback="completed_params"
-               data-body="<h5>Close me now and It will fire a function named completed_params with passing this form back to parent or caller</h5>"
-               href="#"
-               class="btn btn-primary">Callback [access to form]</a>
-        </div>
-    </div>
-    <hr/>
-
-    <div class="row">
-        <div class="col-md-6">
-            Size of modal window simplified using <code>data-sz</code> or <code>data-size</code>
-            <code class=" card card-body">
-                &lt;a data-toggle="modal" data-title="Callback" data-body="Hello World" data-sz="sm|md|lg" href="#"
-                class="btn btn-primary"&gt;Simple&lt;/a&gt;
-            </code>
-            <br/>
-
-            <a data-toggle="modal" data-title="Small" data-body="Small Content, just use data-size='sm'" data-size="sm" href="#"
-               class="btn btn-primary">Small</a>
-            <a data-toggle="modal" data-title="Medium" data-body="Medium Content, just use data-size='md'" data-size="md" href="#"
-               class="btn btn-primary">Medium</a>
-            <a data-toggle="modal" data-title="Large" data-body="Large Content, just use data-size='lg'" data-size="lg" href="#"
-               class="btn btn-primary">large</a>
-
-        </div>
-
-        <div class="col-md-6">
-            Ajax Simplified via data-ajax
-            <code class=" card card-body">
-                &lt;a data-toggle="modal" data-title="Callback" data-ajax="../resource.html" href="#" class="btn
-                btn-primary"&gt;Simple&lt;/a&gt;
-            </code>
-            <br/>
-            <a data-toggle="modal" data-title="Simple" data-ajax="../resource.html" href="#" class="btn btn-primary">Simple
-                Ajax</a>
-        </div>
-    </div>
-    <br/>
-    <hr/>
-
-    <h5>Simple, Via Javascript</h5>
-    <div class="row">
-        <div class="col-md-6">
-            Size of modal window simplified using <code>data-sz</code> or <code>data-size</code>
-            <code class=" card card-body">
-                $("#simple").click(function (e) {
-                e.preventDefault();
-                bscom.modals.simple("Title", "Here I'm simple &lt;button class='btn btn-danger' onclick='bscom.modals.close();'&gt;Close Me!&lt;/button&gt;");
-                });
-            </code>
-            <br/>
-
-            <a id="simple" href="#" class="btn btn-primary">Simple JS</a>
-
-
-        </div>
-
-        <div class="col-md-6">
-            Ajax Simplified via script, by default size is small when calling <code>simple()</code> however if you
-            called <code>show()</code> or <code>open()</code> default size is medium
-            <div class="row">
-                <div class="col-md-6"><code class=" card card-body">
-                    $("#ajax_simple").click(function (e) {
-                    e.preventDefault();
-
-                    $.get("../cresource.html", function (data) {
-                    bscom.modals.simple("Remote", data);
-                    });
-
-                    });
-                </code>
-                    <br /><a id="ajax_simple" href="#" class="btn btn-primary">Simple Ajax</a>
                 </div>
-                <div class="col-md-6">
-                    <code class=" card card-body">
-                    $("#ajax").click(function (e) {
-                    e.preventDefault();
+                <div class="bd-toc-item">
+                    <a href="#data" class="bd-toc-link"> Using Data Attributes</a>
 
-                    $.get("../resource.html", function (data) {
-                    bscom.modals.open("Remote", data, "md", {} ,function(){
-                    alert("test");
+                </div>
+                <div class="bd-toc-item">
+                    <a href="#js" class="bd-toc-link"> Using Javascript</a>
+                </div>
+                <div class="bd-toc-item">
+                    <a href="#mt" class="bd-toc-link"> Modal Types</a>
+                </div>
+            </nav>
 
-                    }, function($mw){
-                    alert("I am done, " + $mw.find(".modal-body").html())
-                    });
-                    });
+        </div>
+        <div class="col-12 col-md-9 pull-md-3 bd-content">
 
-                    })
-                </code> <br /><a id="ajax" href="#" class="btn btn-primary">Callback Ajax</a>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Modals</h2>
+                </div>
+                <div class="col md-12"><p>Easy more than you might think, robust with all possible scenarios with examples for each case.</p></div>
+            </div>
+
+            <h5 class="alert alert-info" id="use"> How to use it? </h5>
+            <div class="row">
+
+                <div class="col-md-12">You ONLY need to reference the modals library javascript file into <code>script</code> inside your page
+                    <pre><code class="hljs html">&lt;script type="text/javascript" src="/bscom.modals.js">&lt;/script></code> </pre>
+
+                    Please make sure that bootstrap version 4 and also jquery library both are already referenced in your pages before start using this library
+                    <br />
+                    <br />
                 </div>
 
             </div>
-            <br/>
+
+            <h5 class="alert alert-info" id="data">Simple, Using Data Attributes </h5>
+
+            <!-------------------------------->
+            <div class="row">
+                <div class="col-md-12">
+                    In one of line of code you can do it, a simple modal with no code at all, just simple anchor with
+                    some data
+                    elements, all it needs is to add <code>data-toggle="modal"</code>, <code>data-title</code> and
+                    <code>data-message|data-body</code>
+                    <pre>
+<code class="hljs html">&lt;a
+    data-toggle="modal"
+    data-title="Simple"
+    data-body="Hello World"
+    href="#"
+    class="btn btn-primary"&gt;Simple&lt;/a&gt;</code> </pre>
+                    <a data-toggle="modal" data-title="Simple" data-body="Hello World" href="#"
+                       class="btn btn-primary">Simple</a>
+
+                </div>
+            </div>
+
+            <!-------------------------------->
+            <div class="row">
+                <div class="col-md-12">
+                    Styled content can be added/wrapped inside <code>data-body</code> atribute
+                    <pre><code class="hljs html">&lt;a
+    data-toggle="modal"
+    data-title="Styled"
+    data-body="&lt;h3>Hello World&lt;/h3>&lt;div class='bg bg-info'>this is styled content&lt;/div>"
+    href="#"
+    class="btn btn-primary"&gt;Simple&lt;/a&gt;</code> </pre>
+
+                    <a data-toggle="modal" data-title="Styled"
+                       data-body="<h3>Hello World</h3><div class='bg bg-info'>this is styled content</div>" href="#"
+                       class="btn btn-primary">Styled Content</a>
+                </div>
+            </div>
+
+            <!-------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Call backs can be added easily via data elements: <code>data-callback</code> and <code>data-hidden-callback</code>,
+                        both <code>displayed</code> and <code>completed</code> functions should be defined in the page
+                        in <code>script</code>tag
+                    </p>
+                    <pre>
+              <code class="hljs html">
+&lt;a data-toggle="modal"
+    data-title="Simple"
+    data-callback="displayed"
+    data-hidden-callback="completed"
+    data-body="&lt;h3>Hello World&lt;/h3>" href="#"
+    class="btn btn-primary">Callbacks</a>
+
+
+                  &lt;script>
+    function displayed() {
+        alert("I am displayed");
+    }
+
+    function completed() {
+        alert("I am done");
+    }
+&lt;/script>
+        </code> </pre>
+
+
+                    <a data-toggle="modal" data-title="Simple" data-callback="displayed"
+                       data-hidden-callback="completed"
+                       data-body="<h3>Hello World</h3>" href="#"
+                       class="btn btn-primary">Callbacks</a>
+                </div>
+            </div>
+
+            <!-------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    After closing the popup, call backs can access the whole form in the popup to get any value from the
+                    window/modal before it is going to be destroyed at all from DOM.
+                    <pre>
+<code class="hljs html">
+&lt;a
+    data-toggle="modal" data-title="Callback"
+    data-body="&lt;h5>Close me now and It will fire a function named completed_params with passing this form back to parent or caller&lt;/h5>"
+    data-hidden-callback="completed_params"
+    href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
+
+&lt;script>
+    function completed_params($mw) {
+        alert("I am done, all form: " + $($mw).find(".modal-body").html());
+    }
+&lt;/script>
+        </code> </pre>
+                    <a data-toggle="modal" data-title="Simple" data-hidden-callback="completed_params"
+                       data-body="<h5>Close me now and It will fire a function named completed_params with passing this form back to parent or caller</h5>"
+                       href="#"
+                       class="btn btn-primary">Callback [access to form]</a>
+                </div>
+            </div>
+
+            <!-------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    Size of modal window simplified using <code>data-sz</code> or <code>data-size</code>
+                    <pre>
+            <code class="hljs html">
+&lt;a data-toggle="modal" data-title="Small" data-body="Small, just use <code>data-size='sm'</code>" data-sz="sm"
+href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
+
+&lt;a data-toggle="modal" data-title="Medium" data-body="Medium, just use data-size='md'" data-sz="md"
+href="#" class="btn btn-primary"&gt;Medium&lt;/a&gt;
+
+&lt;a data-toggle="modal" data-title="Large" data-body="Large, just use data-size='lg'" data-sz="lg"
+href="#" class="btn btn-primary"&gt;Large&lt;/a&gt;
+            </code> </pre>
+
+
+                    <a data-toggle="modal" data-title="Small"
+                       data-body="Small Content, just use <code>data-size='sm'</code>" data-size="sm"
+                       href="#"
+                       class="btn btn-primary">Small</a>
+                    <a data-toggle="modal" data-title="Medium"
+                       data-body="Medium Content, just use <code>data-size='md'</code>"
+                       data-size="md" href="#"
+                       class="btn btn-primary">Medium</a>
+                    <a data-toggle="modal" data-title="Large"
+                       data-body="Large Content, just use <code>data-size='lg'</code>" data-size="lg"
+                       href="#"
+                       class="btn btn-primary">large</a>
+
+                </div>
+            </div>
+
+            <!-------------------------------->
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Ajax Simplified via <code>data-ajax</code>, it will implicitly get the resource from remote
+                        server using jquery and display it as the body of the modal.</p>
+                    <pre><code class="hljs html">
+&lt;a data-toggle="modal" data-title="Ajax"
+    data-ajax="../resource.html"
+    href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
+</code> </pre>
+                    <a data-toggle="modal" data-title="Ajax" data-ajax="../resource.html" href="#"
+                       class="btn btn-primary">Simple Ajax</a>
+                </div>
+            </div>
+
+            <!-------------------------------->
+<div class="row">
+    <div class="col-md-12">
+
+            <h5 id="js" class="alert alert-info">Using Javascript</h5>
+    </div>
+</div>
+            <div class="row">
+                <div class="col-md-12">
+                    In javascript, you can call modal from namespace <code>bscom.modals</code>, just pass only the title
+                    and body of your message you want to display, the body of your message to be displayed inside modal
+                    window can have full html along with javascript to be handled
+                    <pre><code class="hljs html js">
+&lt;a id="simple" href="#" class="btn btn-primary">Simple JS&lt;/a>
+
+&lt;script>
+    $("#simple").click(function (e) {
+        e.preventDefault();
+        bscom.modals.simple("Title", "Here I'm simple &lt;button class='btn btn-danger'
+        onclick='bscom.modals.close();'&gt;Close Me!&lt;/button&gt;");
+    });
+&lt;/script>
+</code></pre>
+                    <a id="simple" href="#" class="btn btn-primary">Simple JS</a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+<b>Get the resource using jQuery and inject what is coming from there into the modal content, it will execute any javascript too like handling event handlers for modal's input elements.</b>
+                    <pre><code class="hljs js">
+$("#ajax").click(function (e) {
+    e.preventDefault();
+
+    $.get("../resource.html", function (response) {
+        bscom.modals.open("Remote Resource", response, "md", {} ,
+            function(){
+                alert("test");
+            },
+            function($mw){
+                alert("I am done, " + $mw.find(".modal-body").html());
+            }
+        );
+    });
+});
+</code> </pre>
+
+                    <a id="ajax" href="#" class="btn btn-primary">Ajax Call with Callbacks</a></div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p>By default size is small when calling <code>simple()</code> function however if you called <code>show()</code> or <code>open()</code> default size is medium</p>
+                    <div class="row">
+                        <div class="col-md-6"><code class=" card card-body">
+                            $("#ajax_simple").click(function (e) {
+                            e.preventDefault();
+
+                            $.get("../cresource.html", function (data) {
+                                bscom.modals.simple("Remote", data);
+                            });
+
+                            });
+                        </code>
+                            <br/><a id="ajax_simple" href="#" class="btn btn-primary">Simple Ajax</a>
+                        </div>
+                        <div class="col-md-12">
+
+                        </div>
+
+                    </div>
+                    <br/>
+
+
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h5 id="mt" class="alert alert-info">Modal Types</h5>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p>Different types and styles for modals are also supported, suppose you want to warn your users or to inform them with a notification, give them an error or confirm to do some action like deleting an item or doing some critical action</p>
+                </div>
+                <div class="col-md-6">
+                    <b>Simple Modal</b>
+                    <pre><code class="hjls js">bscom.modals.simple("Simple", "Simple Msg")
+                    </code> </pre>
+                    <button class="btn btn-secondary" onclick='bscom.modals.simple("Simple!", "My simple message goes here!")'>Simple</button>
+                </div>
+                <div class="col-md-6">
+                    <b>Success Modal</b>
+                    <pre><code class="hjls js">bscom.modals.success("Success", "Success Msg")
+                    </code> </pre>
+                    <button class="btn btn-success" onclick='bscom.modals.success("Success!", "My success message goes here!")'>Success</button>
+                </div>
+
+                <div class="col-md-6">
+                    <b>Info Modal</b>
+                    <pre><code class="hjls js">
+//inform or info (just naming)
+bscom.modals.info("Info!", "Info goes here!");
+bscom.modals.inform("Info!", "Info goes here!");
+                    </code> </pre>
+                    <button class="btn btn-info" onclick='bscom.modals.inform("Info!", "Some information for user goes here!")'>Info</button>
+                </div>
+
+                <div class="col-md-6">
+                    <b>Warning Modal</b>
+                    <pre><code class="hjls js">
+//warn or warning (just naming)
+bscom.modals.warn("Warning!", "My Warning");
+bscom.modals.warning("Warning!", "My Warning");
+                    </code> </pre>
+                    <button class="btn btn-warning" onclick='bscom.modals.warn("Warning!", "System will shutdown after 5 minutes!")'>Warning</button>
+                </div>
+
+                <div class="col-md-6">
+                    <b>Error Modal</b>
+                    <pre><code class="hjls js">
+//error or err (just naming)
+bscom.modals.err("Err!", "Error goes here");
+bscom.modals.error("Error!", "Error goes here");
+                    </code> </pre>
+                    <button class="btn btn-danger" onclick='bscom.modals.err("Error!", "Error message goes here !")'>Error</button>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <b>Confirm Modal</b>
+                        Confirm can be used in different ways with flexibility to specify class names and titles of buttons with event handlers for each one. below are some examples with short description. if you need more info. drop me an email "m.solimanz@hotmail.com"
+
+                        <p>Simplest way: Inline Event Handler</p>
+                        <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay"); });'>
+    Confirm
+&lt;/button>
+                    </code> </pre>
+                        <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
+                    </div>
+                </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <b>Simplest way: Function Name as a string</b>
+                            <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?", "okayHandler")'>Confirm&lt;/button>
+
+&lt;script>
+var okayHandler = function(){ alert("Okay"); }
+&lt;/script>
+</code> </pre>
+                            <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">  <b>2 Handlers (yes/no): Either define using inline function or by specifying function names.</b>
+                            <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
+                        function(){ alert("Okay Pressed!");},
+                        function(){ alert("No Pressed!");})'>Confirm&lt;/button>
+
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?","yesHandler", "noHandler")'>
+    Confirm
+&lt;/button>
+
+&lt;script>
+var yesHandler  = function(){ alert("Okay"); }
+var noHandler = function(){ alert("Okay"); }
+&lt;/script>
+</code> </pre>
+                            <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
+                    function(){ alert("Okay Pressed!"); },
+                     function(){ alert("No Pressed!");})'>Confirm</button></div>
+                    </div>
+
+
+
+
+
+
+            </div>
+
 
 
         </div>
-    </div>
 
+    </div>
 
 </div>
 
@@ -188,6 +447,8 @@
 
 
     $(document).ready(function () {
+
+
         $("#simple").click(function (e) {
             e.preventDefault();
             bscom.modals.simple("Title", "Here I'm simple <button class='btn btn-danger' onclick='bscom.modals.close();'>Close Me!</button>");
@@ -215,7 +476,6 @@
             });
 
         });
-
 
 
     });
