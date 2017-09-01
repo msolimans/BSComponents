@@ -14,7 +14,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 
     <!--BSComp, Modals (only one reference)-->
-    <script src="./js/components/modals/bscom.modals.js"></script>
+    <script src="../js/modals/bscom.modals.js"></script>
 
     <!--Coding Highlights-->
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
@@ -232,7 +232,7 @@ href="#" class="btn btn-primary"&gt;Large&lt;/a&gt;
     data-ajax="../resource.html"
     href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
 </code> </pre>
-                    <a data-toggle="modal" data-title="Ajax" data-ajax="../resource.html" href="#"
+                    <a data-toggle="modal" data-title="Ajax" data-ajax="//raw.githubusercontent.com/msolimans/BSComponents/master/resource.html" href="#"
                        class="btn btn-primary">Simple Ajax</a>
                 </div>
             </div>
@@ -271,7 +271,7 @@ href="#" class="btn btn-primary"&gt;Large&lt;/a&gt;
 $("#ajax").click(function (e) {
     e.preventDefault();
 
-    $.get("../resource.html", function (response) {
+    $.get("./resource.html", function (response) {
         bscom.modals.open("Remote Resource", response, "md", {} ,
             function(){
                 alert("test");
@@ -298,7 +298,7 @@ $("#ajax").click(function (e) {
 $("#ajax_simple").click(function (e) {
     e.preventDefault();
 
-    $.get("../cresource.html", function (data) {
+    $.get("//raw.githubusercontent.com/msolimans/BSComponents/master/cresource.html", function (data) {
         bscom.modals.simple("Remote", data);
     });
 
@@ -431,7 +431,7 @@ bscom.modals.confirm("Confirm?",
         $("#ajax_simple").click(function (e) {
             e.preventDefault();
 
-            $.get("../cresource.html", function (data) {
+            $.get("//raw.githubusercontent.com/msolimans/BSComponents/master/cresource.html", function (data) {
                 bscom.modals.simple("Remote", data);
             });
 
@@ -440,7 +440,7 @@ bscom.modals.confirm("Confirm?",
         $("#ajax").click(function (e) {
             e.preventDefault();
 
-            $.get("../resource.html", function (data) {
+            $.get("//raw.githubusercontent.com/msolimans/BSComponents/master/resource.html", function (data) {
                 bscom.modals.open("Remote", data, "md", {}, function () {
                     alert("test");
 
