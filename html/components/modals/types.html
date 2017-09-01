@@ -3,33 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <title>Modal Types</title>
+    <link rel="stylesheet" href="../../../bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../../../bower_components/highlightjs/styles/github.css">
 
     <script src="../../../bower_components/jquery/dist/jquery.js"></script>
+    <script src="../../../bower_components/tether/dist/js/tether.js"></script>
+    <script src="../../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="../../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+
+    <script src="../../../js/components/modals/bscom.modals.js"></script>
 
     <script src="../../../bower_components/highlightjs/highlight.pack.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
+    <style>
+        pre {
+            margin-bottom: 0px;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+
+        .list-group > .list-group > .list-group-item {
+            padding-left: 35px;
+        }
+
+
+
+
+    </style>
+
+
 </head>
 <body>
 
-
-<pre>
-    <code class="hljs java">
-        int i = 10;
-        static void test(int x){
-            return x * x;
-        }
-
-        public static void main(String[] args){
-            test(10);
-        }
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-3 push-md-9 bd-sidebar">
+            <nav class="bd-links" style="position: fixed">
+                <div class="bd-toc-item">
 
 
-    </code>
-</pre>
 
 
+                        <div class="list-group  well">
+
+                            <a href="index.html" class="list-group-item" >
+                                Return Back to Modals
+                            </a>
+                            <div class="list-group collapse" id="item-1">
+
+
+                                <a href="index.html#use" class="list-group-item"> How to use it? </a>
+
+                                <a href="index.html#data" class="list-group-item" > Using Data Attributes</a>
+                                <a href="index.html#js" class="list-group-item" > Using Javascript</a>
+                                <a href="index.html#mt" class="list-group-item" > Modal Types</a>
+
+
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+
+
+
+                </div>
+
+            </nav>
+
+        </div>
+        <div class="col-12 col-md-9 pull-md-3 bd-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Modal Types (Advacned)</h2>
+                </div>
+                <div class="col md-12"><p>Easy more than you might think, robust with all possible scenarios with examples for each case.</p></div>
+            </div>
+
+            <h5 class="alert alert-info" id="use"> How to use it? </h5>
+            <div class="row">
+
+                <div class="col-md-12">You ONLY need to reference the modals library javascript file into <code>script</code> inside your page
+                    <pre><code class="hljs html">&lt;script type="text/javascript" src="/bscom.modals.js">&lt;/script></code> </pre>
+
+                    Please make sure that bootstrap version 4 and also jquery library both are already referenced in your pages before start using this library
+                    <br />
+                    <br />
+                </div>
+
+            </div>
+
+            <!---------------------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p> <b>Confirm Modal</b>
+                        Confirm can be used in different ways with flexibility to specify class names and titles of buttons with event handlers for each one. below are some examples with short description. if you need more info. drop me an email "m.solimanz@hotmail.com"
+                    </p>
+                    <p><b>Simplest way: Inline Event Handler</b></p> <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay"); });'>
+    Confirm
+&lt;/button>
+                    </code> </pre>
+                    <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
+                </div>
+            </div>
+
+            <!---------------------------------------------->
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Simplest way: Function Name as a string</b>
+                    <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?", "okayHandler")'>Confirm&lt;/button>
+
+&lt;script>
+var okayHandler = function(){ alert("Okay"); }
+&lt;/script>
+</code> </pre>
+                    <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
+                </div>
+            </div>
+            <!---------------------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Simplest way: Function Name as a string</b>
+                    <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?", "okayHandler")'>Confirm&lt;/button>
+
+&lt;script>
+var okayHandler = function(){ alert("Okay"); }
+&lt;/script>
+</code> </pre>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>
+                        Confirm
+                    </button>
+                </div>
+            </div>
+            <!---------------------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Easy to change titles of buttons</b>
+                    <pre><code class="hljs js">
+bscom.modals.confirm("Confirm?", "Are you sure?", {yup: "yupHandler", nope: "nopeHandler"});
+bscom.modals.confirm("Confirm?", "Are you sure?", {yup: function(){...}, nope: function(){...}});
+                        </code></pre>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.confirm("Confirm?", "Are you sure?", {yup: function(){ alert("Yup!"); }, nope: function(){alert("Noooope!");}})'>
+                        Confirm
+                    </button>
+                </div>
+            </div>
+
+
+            <!---------------------------------------------->
+
+            <div class="row">
+                <div class="col-md-12"><b>2 Handlers (yes/no): Either define using inline function or by specifying
+                    function names.</b>
+                    <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
+                        function(){ alert("Okay Pressed!");},
+                        function(){ alert("No Pressed!");})'>Confirm&lt;/button>
+
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?","yesHandler", "noHandler")'>
+    Confirm
+&lt;/button>
+
+&lt;script>
+    var yesHandler  = function(){ alert("Okay Pressed!"); }
+    var noHandler = function(){ alert("No Pressed!"); }
+&lt;/script>
+</code> </pre>
+                    <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
+                    function(){ alert("Okay Pressed!"); },
+                    function(){ alert("No Pressed!");})'>Confirm
+                    </button>
+                </div>
+            </div>
+
+            <!---------------------------------------------->
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Titles of buttons can be specified along with actions and class names to be applied</b>
+                    <pre><code class="hljs html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
+        {okay: {action: function(){ alert("Okay Pressed!");}, class: "btn btn-primary"},
+        cancel: {action: function(){ alert("No Pressed!");}, class: "btn btn-secondary"}})'>
+    Confirm 1
+&lt;/button>
+
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
+                { yup: {action: "yup", class: "btn btn-primary"}, nope: {action: "nope"}})'>
+    Confirm 2
+&lt;/button>
+
+&lt;script>
+    var yup  = function(){ alert("Yup Pressed!"); }
+    var nope = function(){ alert("Nope Pressed!"); }
+&lt;/script>
+                        </code></pre>
+
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
+                        {okay: {action: function(){ alert("Yup Pressed!");}, class: "btn btn-primary"},
+                        cancel: {action: function(){ alert("Nope Pressed!");}, class: "btn btn-secondary"}})'>Confirm 1
+                    </button>
+
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.confirm("Confirm?", "Are you sure?",{ yes: {action: "yesHandler", class: "btn btn-primary"}, no: {action: "noHandler"}})'>
+                        Confirm 2
+                    </button>
+
+                    <script>
+                        var yesHandler = function () {
+                            alert("Yup Pressed!");
+                        }
+                        var noHandler = function () {
+                            alert("Nope Pressed!");
+                        }
+                    </script>
+
+                </div>
+            </div>
+            <!---------------------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <b>However it is not popular you can have only one button and the cancel should be the close button
+                        in title or even click outside the modal</b>
+                    <pre><code class="hljs html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
+                { yup: {action: "yup", class: "btn btn-primary"}})'>
+    Confirm
+&lt;/button>
+                        </code></pre>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.confirm("Confirm?", "Are you sure?",{ yup: {action: function(){alert("yeaaaah!")}, class: "btn btn-primary"}})'>
+                        Confirm
+                    </button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

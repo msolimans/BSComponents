@@ -31,31 +31,39 @@
     <div class="row">
         <div class="col-12 col-md-3 push-md-9 bd-sidebar">
             <nav class="bd-links" style="position: fixed">
-                <div class="bd-toc-item">
-                    <a href="#use" class="bd-toc-link"> How to use it? </a>
+                <div class="list-group list-group-root well">
+
+
+
+
+
+                        <a href="index.html#use" class="list-group-item"> How to use it? </a>
+
+                        <a href="index.html#data" class="list-group-item" > Using Data Attributes</a>
+                        <a href="index.html#js" class="list-group-item" > Using Javascript</a>
+                        <a href="index.html#mt" class="list-group-item" > Modal Types</a>
+                        <a href="types.html" class="list-group-item" > Modal Types (Advanced)</a>
+
+
+
+
+
+
+
 
                 </div>
-                <div class="bd-toc-item">
-                    <a href="#data" class="bd-toc-link"> Using Data Attributes</a>
 
-                </div>
-                <div class="bd-toc-item">
-                    <a href="#js" class="bd-toc-link"> Using Javascript</a>
-                </div>
-                <div class="bd-toc-item">
-                    <a href="#mt" class="bd-toc-link"> Modal Types</a>
-                </div>
             </nav>
 
         </div>
         <div class="col-12 col-md-9 pull-md-3 bd-content">
 
             <div class="row">
-                <div class="col-md-12">
-                    <h2>Modals</h2>
-                </div>
-                <div class="col md-12"><p>Easy more than you might think, robust with all possible scenarios with examples for each case.</p></div>
+            <div class="col-md-12">
+                <h2>Modals</h2>
             </div>
+            <div class="col md-12"><p>Easy more than you might think, robust with all possible scenarios with examples for each case.</p></div>
+        </div>
 
             <h5 class="alert alert-info" id="use"> How to use it? </h5>
             <div class="row">
@@ -278,16 +286,17 @@ $("#ajax").click(function (e) {
                 <div class="col-md-12">
                     <p>By default size is small when calling <code>simple()</code> function however if you called <code>show()</code> or <code>open()</code> default size is medium</p>
                     <div class="row">
-                        <div class="col-md-6"><code class=" card card-body">
-                            $("#ajax_simple").click(function (e) {
-                            e.preventDefault();
+                        <div class="col-md-6">
+                            <pre><code class="hljs js">
+$("#ajax_simple").click(function (e) {
+    e.preventDefault();
 
-                            $.get("../cresource.html", function (data) {
-                                bscom.modals.simple("Remote", data);
-                            });
+    $.get("../cresource.html", function (data) {
+        bscom.modals.simple("Remote", data);
+    });
 
-                            });
-                        </code>
+});
+                        </code></pre>
                             <br/><a id="ajax_simple" href="#" class="btn btn-primary">Simple Ajax</a>
                         </div>
                         <div class="col-md-12">
@@ -317,13 +326,13 @@ $("#ajax").click(function (e) {
                 <div class="col-md-6">
                     <b>Simple Modal</b>
                     <pre><code class="hjls js">bscom.modals.simple("Simple", "Simple Msg")
-                    </code> </pre>
+                    </code></pre>
                     <button class="btn btn-secondary" onclick='bscom.modals.simple("Simple!", "My simple message goes here!")'>Simple</button>
                 </div>
                 <div class="col-md-6">
                     <b>Success Modal</b>
                     <pre><code class="hjls js">bscom.modals.success("Success", "Success Msg")
-                    </code> </pre>
+                    </code></pre>
                     <button class="btn btn-success" onclick='bscom.modals.success("Success!", "My success message goes here!")'>Success</button>
                 </div>
 
@@ -333,7 +342,7 @@ $("#ajax").click(function (e) {
 //inform or info (just naming)
 bscom.modals.info("Info!", "Info goes here!");
 bscom.modals.inform("Info!", "Info goes here!");
-                    </code> </pre>
+                    </code></pre>
                     <button class="btn btn-info" onclick='bscom.modals.inform("Info!", "Some information for user goes here!")'>Info</button>
                 </div>
 
@@ -343,8 +352,7 @@ bscom.modals.inform("Info!", "Info goes here!");
 //warn or warning (just naming)
 bscom.modals.warn("Warning!", "My Warning");
 bscom.modals.warning("Warning!", "My Warning");
-                    </code> </pre>
-                    <button class="btn btn-warning" onclick='bscom.modals.warn("Warning!", "System will shutdown after 5 minutes!")'>Warning</button>
+                    </code></pre> <button class="btn btn-warning" onclick='bscom.modals.warn("Warning!", "System will shutdown after 5 minutes!")'>Warning</button>
                 </div>
 
                 <div class="col-md-6">
@@ -353,67 +361,27 @@ bscom.modals.warning("Warning!", "My Warning");
 //error or err (just naming)
 bscom.modals.err("Err!", "Error goes here");
 bscom.modals.error("Error!", "Error goes here");
-                    </code> </pre>
+                    </code></pre>
                     <button class="btn btn-danger" onclick='bscom.modals.err("Error!", "Error message goes here !")'>Error</button>
                 </div>
 
+                <div class="col-md-6">
+                    <b>Confirm Modal</b>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <b>Confirm Modal</b>
-                        Confirm can be used in different ways with flexibility to specify class names and titles of buttons with event handlers for each one. below are some examples with short description. if you need more info. drop me an email "m.solimanz@hotmail.com"
-
-                        <p>Simplest way: Inline Event Handler</p>
-                        <pre><code class="hjls html">
-&lt;button class="btn btn-primary"
-    onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay"); });'>
-    Confirm
-&lt;/button>
-                    </code> </pre>
-                        <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
-                    </div>
+ <pre><code class="hjls js">
+bscom.modals.confirm("Confirm?",
+     "Are you sure?",
+     function(){ alert("Okay"); });'>
+</code> </pre>
+                    <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
                 </div>
 
+                <!---------------------------------------------->
+                <div class="row">
+                    <div class="col-md-12">For more Advanced Modal Types scenarios and actions, please check <a href="types.html">this link!</a> &nbsp;<br /> <br /> <br /> <br /></div>
+                </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
-                            <b>Simplest way: Function Name as a string</b>
-                            <pre><code class="hjls html">
-&lt;button class="btn btn-primary"
-    onclick='bscom.modals.confirm("Confirm?", "Are you sure?", "okayHandler")'>Confirm&lt;/button>
-
-&lt;script>
-var okayHandler = function(){ alert("Okay"); }
-&lt;/script>
-</code> </pre>
-                            <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-12">  <b>2 Handlers (yes/no): Either define using inline function or by specifying function names.</b>
-                            <pre><code class="hjls html">
-&lt;button class="btn btn-primary"
-    onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
-                        function(){ alert("Okay Pressed!");},
-                        function(){ alert("No Pressed!");})'>Confirm&lt;/button>
-
-&lt;button class="btn btn-primary"
-    onclick='bscom.modals.confirm("Confirm?", "Are you sure?","yesHandler", "noHandler")'>
-    Confirm
-&lt;/button>
-
-&lt;script>
-var yesHandler  = function(){ alert("Okay"); }
-var noHandler = function(){ alert("Okay"); }
-&lt;/script>
-</code> </pre>
-                            <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?",
-                    function(){ alert("Okay Pressed!"); },
-                     function(){ alert("No Pressed!");})'>Confirm</button></div>
-                    </div>
-
+<!---------------------------------------------->
 
 
 
