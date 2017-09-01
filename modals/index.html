@@ -4,15 +4,22 @@
     <meta charset="UTF-8">
     <title>Simple</title>
 
-    <link rel="stylesheet" href="../../../bower_components/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="../../../bower_components/highlightjs/styles/github.css">
+    <!--Bootstrap and Coding Highlights Styling-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
 
-    <script src="../../../bower_components/jquery/dist/jquery.js"></script>
-    <script src="../../../bower_components/tether/dist/js/tether.js"></script>
-    <script src="../../../bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <!--jQuery and Bootstrap -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.0/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 
-    <script src="../../../bower_components/highlightjs/highlight.pack.min.js"></script>
+    <!--BSComp, Modals (only one reference)-->
+    <script src="./js/components/modals/bscom.modals.js"></script>
+
+    <!--Coding Highlights-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+
 
     <style>
         pre {
@@ -398,7 +405,6 @@ bscom.modals.confirm("Confirm?",
 </div>
 
 
-<script src="../../../js/components/modals/bscom.modals.js"></script>
 <script>
 
     function displayed() {
