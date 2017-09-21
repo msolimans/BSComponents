@@ -116,12 +116,19 @@
     $(document).ready(function () {
 
         $("#bsGrid1").bsGrid({
-            cols: ["col1", "col2"],
             data:[
-                {col1: "hello", col2: "world"},
-                {col1: "hello1", col2: "world2"},
+                {col1: "hello", col2: "world", col3: "world world"},
+                {col1: "hello1", col2: "world2"}
             ]
         });
+
+//        $("#bsGrid1").bsGrid({
+//            cols: ["col1", "col2"],
+//            data:[
+//                {col1: "hello", col2: "world"},
+//                {col1: "hello1", col2: "world2"}
+//            ]
+//        });
 
 
     });

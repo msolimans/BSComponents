@@ -31,7 +31,8 @@ var $filter =  $('<button class="btn btn-default btn-sm"><i class="fa fa-filter"
                 filter: true,
                 autoPopulate: true,
                 cols:[],
-                data: []
+                data: [],
+                merge: true
             }, options);
 
             var $header = $template.find("div.card-header"),
@@ -46,25 +47,43 @@ var $filter =  $('<button class="btn btn-default btn-sm"><i class="fa fa-filter"
                 $header.append($("<div class=\"float-right\"></div>").append($filter));
             }
 
-            var trh = $("<tr class='filters'></tr>");
+            if(settings.cols.length == 0) {
+                //build it
+                for(var indx in settings.data){
+                    for(var p in settings.data[indx]) {
+                        if (settings.cols.indexOf(p) > -1)
+                            continue;
+                        settings.cols.push(p);
+                    }
+                }
+            }
 
+            var trh = $("<tr class='filters'></tr>");
             settings.cols.forEach(function (t) {
                 //populate header
                 trh.append("<th><input type='text' class='form-control' placeholder='#' disabled /></th>");
             });
             trh.appendTo($thead);
 
-            settings.data.forEach(function (t) {
-                //populate content (rows)
-                var tr = "<tr>" ;
-                for(var col in settings.cols){
-                    tr += "<td>"+ t[settings.cols[col]] + "</td>";
 
-                }
-                tr += "</tr>";
+            settings.data.forEach(function (t) {
+
+                //populate content (rows) based on defined cols
+                    var tr = "<tr>";
+
+                    for (var col in settings.cols) {
+                        tr += "<td>" + t[settings.cols[col]] + "</td>";
+                    }
+
+                    tr += "</tr>";
+
                 $tbody.append(tr);
 
+
             });
+
+
+
 
             this.filter("div").append(function () {
                 return $template;
