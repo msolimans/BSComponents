@@ -50,6 +50,10 @@ window.bscom.modals = (function () {
         switch (btnName.toLowerCase()) {
             case "ok":
             case "okay":
+            case "yup":
+            case "yeap":
+            case "yeah":
+            case "yep":
             case "yes":
                 return "btn btn-" + type;
             default:
