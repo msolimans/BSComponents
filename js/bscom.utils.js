@@ -1,4 +1,10 @@
 (function() {
+    var toTitleCase = function (str) {
+        return str.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).replace(/([A-Z])/g, " $1");
+        });
+    };
+
     var callFunc = function (cb, $mw, args) {
         if (cb) {
             if (typeof cb === 'function')
@@ -24,7 +30,8 @@
     };
 
     return {
-        call: callFunc
-    }
+        call: callFunc,
+        toTitleCase: toTitleCase
+    };
 
 })();
