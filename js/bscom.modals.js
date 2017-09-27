@@ -135,10 +135,10 @@ window.bscom.modals = (function () {
         }
     };
 
-    var bindKb = function(){
-            //check select2 issue wth tab-index=-1|0|1
-            //https://www.bountysource.com/issues/1098490-select2-bootstrap-modal-weird-scrolling
-            alert("test");
+    var bindKb = function () {
+        //check select2 issue wth tab-index=-1|0|1
+        //https://www.bountysource.com/issues/1098490-select2-bootstrap-modal-weird-scrolling
+        alert("test");
 
 
     };
@@ -225,6 +225,30 @@ window.bscom.modals = (function () {
         });
     };
 
+    var tickShow = function (indx) {
+
+        console.log("ticked");
+        if ($modals.length - 1 > indx) {
+            //move out this window in indx to the last element
+            var elem = $modals[indx];
+
+            for (var i = indx; i < $modals.length - 1; i++) {
+                $modals[i] = $modals[i + 1];
+            }
+            $modals[$modals.length - 1] = elem;
+        }
+
+        //show the modal window and return it for further processing if needed
+        var elem = getCurrent();
+
+        elem.window.modal({
+            show: true,
+            keyboard: elem.keyoard || elem.kb || true,
+            focus: true
+        });
+
+
+    };
 
     var showModal = function () {
 
@@ -235,12 +259,7 @@ window.bscom.modals = (function () {
         //register events for callbacks and sizes
         registerEvents(elem);
 
-        //show the modal window and return it for further processing if needed
-        elem.window.modal({
-            show: true,
-            keyboard: elem.keyoard || elem.kb || true,
-            focus: true
-        });
+        setTimeout(tickShow.bind(null, $modals.length - 1), elem.timer && elem.timer.after || 0);
 
         return elem.window;
 
@@ -344,7 +363,8 @@ window.bscom.modals = (function () {
 
         /*data-kb, data-type="confirm|info|warning|simple|err" data-buttons-ok="functionName" data-buttons-ok-class="className"  data-buttons-cancel="action" data-buttons-cancel-class="" */
         var kb = $data.kb || $data.keyboard || true;
-        delete $data.kb; delete $data.keyboard;
+        delete $data.kb;
+        delete $data.keyboard;
 
         if (!ajax && !body)
             body = "Please specify either ajax url [data-ajax] or message [data-message|data-body] to be displayed in this window";
@@ -368,22 +388,40 @@ window.bscom.modals = (function () {
 
     };
 
-
-
-    var generateOkay = function (okBtn) {
-        if(!okBtn)
+    var generateBtn = function (btn, name) {
+        //generate okay by default
+        if (!btn)
             return {
                 okay: {}
             };
 
-        if (okBtn && typeof okBtn == "function") {
-            var temp = okBtn;
+        if (btn && (typeof btn === "function" || typeof btn === "string")) {
+            var temp = btn;
+            btn = {};
 
-            okBtn.okay = {};
-            okBtn.okay.action = temp;
+            //name not provided, generate names
+            if (!name) {
+                var current = getCurrent();
+                if (!current.btnCounter) {
+                    current.btnCounter = 1;
+
+                } else {
+                    current.btnCounter += 1;
+                }
+                setCurrent(current);
+                name = "Button " + current.btnCounter;
+            }
+
+            btn[name] = {};
+            btn[name].action = temp;
 
         }
-        return okBtn;
+
+        return btn;
+    };
+
+    var generateOkay = function (okBtn) {
+        return generateBtn(okBtn, "Okay");
     };
 
 
@@ -393,12 +431,13 @@ window.bscom.modals = (function () {
                 title: "Info",
                 body: "Please specify either ajax url [data-ajax] or message [data-message|data-body] to be displayed in this window",
                 size: "md",
-                type: "info"//,
-                //data: {},
-                //rdata: {},
-                //cb: undefined,
-                //hcb: undefined,
-                //window: undefined
+                type: "info",
+                timer: undefined,
+                data: {},
+                rdata: {},
+                cb: undefined,
+                hcb: undefined,
+                window: undefined
             };
 
             $.extend(opts, options);
@@ -415,39 +454,92 @@ window.bscom.modals = (function () {
             showModal();
 
         },
+        timeout: function (title, body) {
+            //buttons comes at the end
+            //opts => {after: 60 sec, count: 20 sec=> if counter specified it should be displayed inside body, redirect: url (if not specified logout will be used), logout: this is url, live: this is also url}
+            var defaults = {
+                after: 3 * 1000,//display after 3 secs
+                count: 3 * 1000,//count for 3 secs
+                alive: "/alive",
+                logout: "/logout",
+                redirect: "/logout"
+            };
+
+            var opts = Array.prototype.slice.call(arguments, 2); //exclude first 2 args
+            if (!opts || opts.length == 0 || (opts.length == 1 && typeof(opts[0]) === "object"))
+                opts = $.extend(defaults, opts[0]);
+            else {
+                var t = {};
+                t.after = opts[0];
+                t.count = opts[1] || defaults.count;
+                t.alive = opts[2] || defaults.alive;
+                t.logout = opts[3] || defaults.logout;
+                t.redirect = opts[4] || t.logout; //if not specified logout will be used
+                opts = t;
+            }
+            // return exports.display({
+            //     title: title,
+            //     body: body,
+            //     buttons: generateOkay(),
+            //     type: "danger",
+            //     timer: opts
+            // });
+
+           return exports.confirm(title, body, {
+               StayConnected: {class: "btn btn-primary", action: function(){window.location = opts.alive}},
+               Logout: {class: "btn btn-danger", action: function(){window.location = opts.logout;}},
+               popupConfigs: {
+                   timer: opts,
+                   onShow: function(){setTimeout(function(){window.location = opts.redirect;}, opts.count);}
+               }
+
+           });
+        },
 
         //e.g. buttons: { Yes: {class: "btn btn-success", action: function(){ ... } }, No: { action: function(){ ... } } }
         //e.g. buttons: { Yes: function(){alert('test');} }
         //e.g. buttons: { Yes: "myFunctionName" }
-        confirm: function (title, body, btns, secbtns) {
-            if (!btns) {
+        confirm: function (title, body) {
+            var btns = Array.prototype.slice.call(arguments, exports.confirm.length);
+
+            var timer = undefined;
+            var onShow = undefined;
+
+            if(btns.length == 1){
+                timer = btns[0].popupConfigs && btns[0].popupConfigs.timer;
+                onShow = btns[0].popupConfigs && btns[0].popupConfigs.onShow;
+                delete btns[0].popupConfigs;
+            }
+
+            if (!btns || btns.length == 0) {
                 return exports.info(title, body);
             }
 
-            //in case passed event handlers (both functions or functionNames)
-            if (btns && secbtns && (typeof btns === "function" || typeof btns === "string") && (typeof secbtns === "function" || typeof secbtns === "string")) {
-                var temp = btns;
-                btns = {};
-                btns.Yes = {};
-                btns.Yes.action = temp;
+            var temp = {};
+            //first and second only
+            temp = $.extend(temp, generateBtn(btns[0], "Yes"));
 
-                btns.No = {};
-                btns.No.action = secbtns;
-            } else if (btns && typeof btns == "function") {
-                var temp = btns;
-
-                btns.Yes = {};
-                btns.Yes.action = temp;
-
-                btns.No = {};
+            //Generate NO in case we have only length of ONE and it is of type string/function or (object and has only one key)
+            if (btns.length == 1) {
+                if (typeof(btns[0]) == 'string' || typeof(btns[0]) == 'function' || (typeof(btns[0]) == "object" && Object.keys(btns[0]).length == 1))
+                    temp = $.extend(temp, generateBtn({no: {}}));
             }
+            else
+            //greater than 1, generate sec button
+                temp = $.extend(temp, generateBtn(btns[1], "No"));
 
+            //generate rest of btns if any
+            for (var i = 2; i < btns.length; i++) {
+                temp = $.extend(temp, generateBtn(btns[i]));
+            }
 
             return exports.display({
                 title: title,
                 body: body,
-                buttons: btns,
-                type: "danger"
+                buttons: temp,
+                type: "danger",
+                timer: timer,
+                cb: onShow
             });
         },
         warning: function (title, body, btn) {
@@ -535,7 +627,8 @@ window.bscom.modals = (function () {
         warn: exports.warning,
         warning: exports.warning,
         success: exports.success,
-        confirm: exports.confirm
+        confirm: exports.confirm,
+        timeout: exports.timeout
     };
 
 })();
