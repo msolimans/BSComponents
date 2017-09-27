@@ -14,7 +14,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 
     <!--BSComp, Modals (only one reference)-->
-    <script src="../js/modals/bscom.modals.js"></script>
+    <script src="../js/bscom.modals.js"></script>
 
     <!--Coding Highlights-->
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
@@ -293,14 +293,14 @@ $("#ajax").click(function (e) {
                 <div class="col-md-12">
                     <p>By default size is small when calling <code>simple()</code> function however if you called <code>show()</code> or <code>open()</code> default size is medium</p>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <pre><code class="hljs js">
 $("#ajax_simple").click(function (e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    $.get("//raw.githubusercontent.com/msolimans/BSComponents/master/cresource.html", function (data) {
-        bscom.modals.simple("Remote", data);
-    });
+  $.get("//raw.githubusercontent.com/msolimans/BSComponents/master/cresource.html", function (data) {
+     bscom.modals.simple("Remote", data);
+  });
 
 });
                         </code></pre>
