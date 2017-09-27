@@ -464,7 +464,12 @@ window.bscom.modals = (function () {
                 after: 3 * 1000,//display after 3 secs
                 count: 3 * 1000,//count for 3 secs
                 alive: "/alive",
+                aliveData: {},
+                aliveType: "GET",
+                aliveRequestType: "GET",
+                aliveAjaxType: "GET",
                 logout: "/logout",
+                login: "/login",
                 redirect: "/logout"
             };
 
@@ -478,6 +483,9 @@ window.bscom.modals = (function () {
                 t.alive = opts[2] || defaults.alive;
                 t.logout = opts[3] || defaults.logout;
                 t.redirect = opts[4] || t.logout; //if not specified logout will be used
+                t.aliveData = opts[5] || defaults.aliveData;
+                t.aliveType = opts[6] || defaults.aliveType;
+
                 opts = t;
             }
             // return exports.display({
@@ -489,7 +497,20 @@ window.bscom.modals = (function () {
             // });
 
            return exports.confirm(title, body, {
-               StayConnected: {class: "btn btn-primary", action: function(){window.location = opts.alive}},
+               StayConnected: {class: "btn btn-primary", action: function(){
+                   $.ajax({
+                       url: opts.alive,
+                       type: opts.aliveType || opts.aliveRequestType || opts.aliveAjaxType,
+                       data: opts.aliveData,
+                       success: function(){
+                           exports.close();
+                       },
+                       error: function (data) {
+                           exports.info("Error", "Error while trying to refresh your current sessions and you have to login again", {LoginAgain: {class: "btn btn-info", action: function(){ window.location = opts.login; }}})
+                       }
+                   });
+
+               }},
                Logout: {class: "btn btn-danger", action: function(){window.location = opts.logout;}},
                popupConfigs: {
                    timer: opts,
