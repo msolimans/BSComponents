@@ -63,7 +63,7 @@ window.bscom.modals = (function () {
 
     var toTitleCase = function (str) {
         return str.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            return txt.charAt(0).toUpperCase() + txt.substr(1).replace(/([A-Z])/g, " $1");
         });
     };
 
@@ -143,7 +143,6 @@ window.bscom.modals = (function () {
         //check select2 issue wth tab-index=-1|0|1
         //https://www.bountysource.com/issues/1098490-select2-bootstrap-modal-weird-scrolling
         alert("test");
-
 
     };
 
