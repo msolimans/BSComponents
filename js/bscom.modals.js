@@ -108,7 +108,7 @@ window.bscom.modals = (function () {
             '</button>' +
             '</div>' +
             '<div class="modal-body">' +
-            elem.body + //where the real content of the modal should be injected
+            elem.body.replace(/\{\{(c|counter|cc)\}\}/gi,"<span id='" + elem.id + "-counter'></span>") + //where the real content of the modal should be injected
             '</div>' +
             injectButtons(elem) //where buttons are going in the footer
         );
@@ -116,27 +116,28 @@ window.bscom.modals = (function () {
     };
 
     var callFunc = function (cb, $mw, args) {
-        if (cb) {
-            if (typeof cb === 'function')
-                cb($mw, args);
-            //string
-            else {
-                //call the function name from the string through the window (safer than eval())
-                var ncb = window[cb];
+        if (!cb) return;
 
-                //the whole function is passed as a string
-                if (!ncb) {
-                    //hookup the code in a closure to disable conflicts and global access
-                    eval('(function(){ var f = ' + cb + '; f();})();');
-                    return;
-                }
+        if (typeof cb === 'function')
+            cb($mw, args);
+        //string
+        else {
+            //call the function name from the string through the window (safer than eval())
+            var ncb = window[cb];
 
-                cb = ncb;
-
-                if (cb)
-                    cb.apply(null, [$mw, args]);
+            //the whole function is passed as a string
+            if (!ncb) {
+                //hookup the code in a closure to disable conflicts and global access
+                eval('(function(){ var f = ' + cb + '; f();})();');
+                return;
             }
+
+            cb = ncb;
+
+            if (cb)
+                cb.apply(null, [$mw, args]);
         }
+
     };
 
     var bindKb = function () {
@@ -205,6 +206,22 @@ window.bscom.modals = (function () {
         //after shown event, set the height of popup and call callback function
         $mw.off("shown.bs.modal").on("shown.bs.modal", function (e) {
             $(this).find(".modal-dialog").css("max-height", $(window).height() * 0.90);
+            var elem = getCurrent();
+            if(elem.timer && elem.timer.count ){
+                var $c = $(this).find("#" + elem.id + "-counter");
+                var count = elem.timer.count/1000;
+                $c.text(count);
+                if($c && $c.length > 0){
+                    //count down there
+                    var interval = setInterval(function(){
+                        if(count == 0)
+                            clearInterval(interval);
+                        $c.text(--count);
+                    }, 1000);
+
+                }
+
+            }
 
             callFunc(cb, $(e.currentTarget));
 
@@ -213,9 +230,9 @@ window.bscom.modals = (function () {
         //no content is removed until replaced by another window (keep it to get any values from window)
         $mw.off("hidden.bs.modal").on("hidden.bs.modal", function (e) {
 
-            if (hiddenCb) {
-                var elem = getCurrent();
+            var elem = getCurrent();
 
+            if (hiddenCb) {
                 callFunc(hiddenCb, $(e.currentTarget), elem ? elem.rdata : undefined);
             }
 
@@ -249,7 +266,6 @@ window.bscom.modals = (function () {
             keyboard: elem.keyoard || elem.kb || true,
             focus: true
         });
-
 
     };
 
@@ -306,12 +322,24 @@ window.bscom.modals = (function () {
     });
 
     $(document).on("click", "*[data-action]", function () {
-        //var fnString = $(this).data("action");
+
 
         var elem = getCurrent();
 
-        exports.close();
+        //clear counter timeout first if exists
+        if(elem.timer && elem.timer.sto) {
+            delete elem.timer.sto;
+            clearTimeout(elem.timer.sto);
+        }
 
+        //close window
+        try{
+            exports.close();
+        }catch (ex){
+            console.log(ex);
+        }
+
+        //call the action here
         var button = elem.buttons[$(this).data("action")];
 
         if (!button)
@@ -470,7 +498,10 @@ window.bscom.modals = (function () {
                 aliveAjaxType: "GET",
                 logout: "/logout",
                 login: "/login",
-                redirect: "/logout"
+                redirect: "/logout",
+                onShow: undefined,
+                onAliveSuccess: undefined,
+                onAliveError: undefined
             };
 
             var opts = Array.prototype.slice.call(arguments, 2); //exclude first 2 args
@@ -496,28 +527,56 @@ window.bscom.modals = (function () {
             //     timer: opts
             // });
 
-           return exports.confirm(title, body, {
-               StayConnected: {class: "btn btn-primary", action: function(){
-                   $.ajax({
-                       url: opts.alive,
-                       type: opts.aliveType || opts.aliveRequestType || opts.aliveAjaxType,
-                       data: opts.aliveData,
-                       success: function(){
-                           exports.close();
-                       },
-                       error: function (data) {
-                           exports.info("Error", "Error while trying to refresh your current sessions and you have to login again", {LoginAgain: {class: "btn btn-info", action: function(){ window.location = opts.login; }}})
-                       }
-                   });
+            return exports.confirm(title, body, {
+                StayConnected: {
+                    class: "btn btn-primary", action: function () {
+                        $.ajax({
+                            url: opts.alive,
+                            type: opts.aliveType || opts.aliveRequestType || opts.aliveAjaxType,
+                            data: opts.aliveData,
+                            success: function () {
+                                if(opts.onAliveSuccess)
+                                    callFunc(opts.onAliveSuccess);
+                            },
+                            error: function (data) {
+                                //make it 1 sec late to allow hidden to be fired and pop last one
+                                setTimeout(function(){
+                                    exports.info("Error", "Error while trying to refresh your current sessions and you have to login again", {
+                                        LoginAgain: {
+                                            class: "btn btn-info",
+                                            action: function () {
+                                                window.location = opts.login;
+                                            }
+                                        }
+                                    });
 
-               }},
-               Logout: {class: "btn btn-danger", action: function(){window.location = opts.logout;}},
-               popupConfigs: {
-                   timer: opts,
-                   onShow: function(){setTimeout(function(){window.location = opts.redirect;}, opts.count);}
-               }
+                                    if(opts.onAliveError)
+                                        callFunc(opts.onAliveError);
 
-           });
+                                }, 1000);
+                            }
+                        });
+
+                    }
+                },
+                Logout: {
+                    class: "btn btn-danger", action: function () {
+                        //clear timeout that was started
+                        window.location = opts.logout;
+                    }
+                },
+                popupConfigs: {
+                    timer: opts,
+                    onShow: function () {
+                        var current = getCurrent();
+                        current.timer.sto = setTimeout(function () {
+                            window.location = opts.redirect;
+                        }, opts.count);
+                        setCurrent(current);
+                    }
+                }
+
+            });
         },
 
         //e.g. buttons: { Yes: {class: "btn btn-success", action: function(){ ... } }, No: { action: function(){ ... } } }
@@ -529,7 +588,7 @@ window.bscom.modals = (function () {
             var timer = undefined;
             var onShow = undefined;
 
-            if(btns.length == 1){
+            if (btns.length == 1) {
                 timer = btns[0].popupConfigs && btns[0].popupConfigs.timer;
                 onShow = btns[0].popupConfigs && btns[0].popupConfigs.onShow;
                 delete btns[0].popupConfigs;
