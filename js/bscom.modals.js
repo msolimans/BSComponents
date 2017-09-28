@@ -234,11 +234,15 @@ window.bscom.modals = (function () {
                 callFunc(hiddenCb, $(e.currentTarget), elem ? elem.rdata : undefined);
             }
 
-            //remove the last elem (we don't need it anymore')
-            $modals.pop();
-            counter--;
 
-            $mw.find("div.modal-content").html("");
+            //remove the last elem (we don't need it anymore) - we should not remove timeout ones
+            if(!elem.timer) {
+                $modals.pop();
+                counter--;
+                $mw.find("div.modal-content").html("");
+            }else{
+                showModal();
+            }
 
         });
     };
@@ -276,14 +280,17 @@ window.bscom.modals = (function () {
 
     };
 
-    var showModal = function () {
+    var showModal = function (injectedBefore) {
 
         var elem = getCurrent();
 
-        injectModalInfo(elem);
+        if(!injectedBefore) {
+            injectModalInfo(elem);
 
-        //register events for callbacks and sizes
-        registerEvents(elem);
+
+            //register events for callbacks and sizes
+            registerEvents(elem);
+        }
 
         //register timing ticks and timer events in case only the current window is of type timer
         if (elem.timer && elem.timer.after) {
@@ -368,8 +375,8 @@ window.bscom.modals = (function () {
 
         //clear counter timeout first if exists
         if (elem.timer && elem.timer.sto) {
-            delete elem.timer.sto;
             clearTimeout(elem.timer.sto);
+            delete elem.timer.sto;
         }
 
         //close window
@@ -538,7 +545,7 @@ window.bscom.modals = (function () {
                 aliveAjaxType: "GET",
                 logout: "/logout",
                 login: "/login",
-                redirect: "/logout",
+                redirect: undefined,
                 onShow: undefined,
                 onAliveSuccess: undefined,
                 onAliveError: undefined,
@@ -546,7 +553,7 @@ window.bscom.modals = (function () {
             };
 
             var opts = Array.prototype.slice.call(arguments, 2); //exclude first 2 args
-            if (!opts || opts.length == 0 || (opts.length == 1 && typeof(opts[0]) === "object"))
+            if (!opts || opts.length === 0 || (opts.length === 1 && typeof(opts[0]) === "object"))
                 opts = $.extend(defaults, opts[0]);
             else {
                 var t = {};
@@ -560,13 +567,9 @@ window.bscom.modals = (function () {
 
                 opts = t;
             }
-            // return exports.display({
-            //     title: title,
-            //     body: body,
-            //     buttons: generateOkay(),
-            //     type: "danger",
-            //     timer: opts
-            // });
+
+            //clone logout in case redirect not passed
+            opts.redirect = opts.redirect || opts.logout;
 
             return exports.confirm(title, body, {
                 StayConnected: {
@@ -610,6 +613,7 @@ window.bscom.modals = (function () {
                     timer: opts,
                     onShow: function () {
                         var current = getCurrent();
+                        //this is used to set shown time out (after it is shown and no interaction it should redirect to configured "redirect" url (like you have been signed out due to inactivity or session timeout)
                         current.timer.sto = setTimeout(function () {
                             window.location = opts.redirect;
                         }, opts.count);
