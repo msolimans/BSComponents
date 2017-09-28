@@ -2,7 +2,7 @@ window.bscom = window.bscom || {};
 
 window.bscom.modals = (function () {
 
-    var counter = 0, $modals = [], name = "smodal-",
+    var counter = 0, $modals = [], name = "smodal-", hasTimers = false,
         $modal = $(
             '<div data-refresh="true" class="modal fade" id="modalWindow"  role="dialog" aria-labelledby="modalLabel" aria-hidden="true">' +
             '<div class="modal-dialog ">' +
@@ -108,7 +108,7 @@ window.bscom.modals = (function () {
             '</button>' +
             '</div>' +
             '<div class="modal-body">' +
-            elem.body.replace(/\{\{(c|counter|cc)\}\}/gi,"<span id='" + elem.id + "-counter'></span>") + //where the real content of the modal should be injected
+            elem.body.replace(/\{\{(c|counter|cc)\}\}/gi, "<span id='" + elem.id + "-counter'></span>") + //where the real content of the modal should be injected
             '</div>' +
             injectButtons(elem) //where buttons are going in the footer
         );
@@ -207,20 +207,18 @@ window.bscom.modals = (function () {
         $mw.off("shown.bs.modal").on("shown.bs.modal", function (e) {
             $(this).find(".modal-dialog").css("max-height", $(window).height() * 0.90);
             var elem = getCurrent();
-            if(elem.timer && elem.timer.count ){
+            if (elem.timer && elem.timer.count) {
                 var $c = $(this).find("#" + elem.id + "-counter");
-                var count = elem.timer.count/1000;
+                var count = elem.timer.count / 1000;
                 $c.text(count);
-                if($c && $c.length > 0){
+                if ($c && $c.length > 0) {
                     //count down there
-                    var interval = setInterval(function(){
-                        if(count == 0)
+                    var interval = setInterval(function () {
+                        if (count == 0)
                             clearInterval(interval);
                         $c.text(--count);
                     }, 1000);
-
                 }
-
             }
 
             callFunc(cb, $(e.currentTarget));
@@ -249,7 +247,7 @@ window.bscom.modals = (function () {
 
         console.log("ticked");
         if ($modals.length - 1 > indx) {
-            //move out this window in indx to the last element
+            //shifting: move out this window in indx to the last element
             var elem = $modals[indx];
 
             for (var i = indx; i < $modals.length - 1; i++) {
@@ -260,6 +258,15 @@ window.bscom.modals = (function () {
 
         //show the modal window and return it for further processing if needed
         var elem = getCurrent();
+        if (elem.timerId) {
+            //once shown/display, it's not valid to reset its timer anymore (delay its display) as it is already shown!
+            delete  elem.timerId;
+            setCurrent(elem);
+            //hasTimers = false;
+            if(elem.timer && !elem.timer.ignoreUserActivity)
+                unRegisterTimerEvents();
+        }
+
 
         elem.window.modal({
             show: true,
@@ -278,7 +285,18 @@ window.bscom.modals = (function () {
         //register events for callbacks and sizes
         registerEvents(elem);
 
-        setTimeout(tickShow.bind(null, $modals.length - 1), elem.timer && elem.timer.after || 0);
+        //register timing ticks and timer events in case only the current window is of type timer
+        if (elem.timer && elem.timer.after) {
+            //bind is used here to be able pass param to function wrapped within setTimeout()
+            //save timerId in case we need to reset it later
+            elem.timerId = setTimeout(tickShow.bind(null, $modals.length - 1), elem.timer && elem.timer.after || 0);
+            //hasTimers = true;
+            if (!elem.timer.ignoreUserActivity)
+                registerTimerEvents();
+            setCurrent(elem);
+        }
+        else
+            tickShow($modals.length - 1);
 
         return elem.window;
 
@@ -312,6 +330,28 @@ window.bscom.modals = (function () {
     };
 
     /*Event Handlers ------------------------------------------------------------------------------------------------*/
+
+    function registerTimerEvents() {
+
+        $(document).on("keyup mouseup", function () {
+            //if (hasTimers)
+            for (var i = 0; i < $modals.length; i++) {
+
+                var elem = $modals[i];
+                clearTimeout(elem.timerId);
+                elem.timerId = setTimeout(tickShow.bind(null, i), elem.timer && elem.timer.after || 0);
+                setCurrent(elem);
+            }
+
+        });
+
+    }
+
+    function unRegisterTimerEvents() {
+        $(document).off("keyup mouseup");
+    }
+
+
     $(document).on("click", ".modal-cancel", function () {
         exports.close();
     });
@@ -327,15 +367,15 @@ window.bscom.modals = (function () {
         var elem = getCurrent();
 
         //clear counter timeout first if exists
-        if(elem.timer && elem.timer.sto) {
+        if (elem.timer && elem.timer.sto) {
             delete elem.timer.sto;
             clearTimeout(elem.timer.sto);
         }
 
         //close window
-        try{
+        try {
             exports.close();
-        }catch (ex){
+        } catch (ex) {
             console.log(ex);
         }
 
@@ -501,7 +541,8 @@ window.bscom.modals = (function () {
                 redirect: "/logout",
                 onShow: undefined,
                 onAliveSuccess: undefined,
-                onAliveError: undefined
+                onAliveError: undefined,
+                ignoreUserActivity: true
             };
 
             var opts = Array.prototype.slice.call(arguments, 2); //exclude first 2 args
@@ -535,12 +576,12 @@ window.bscom.modals = (function () {
                             type: opts.aliveType || opts.aliveRequestType || opts.aliveAjaxType,
                             data: opts.aliveData,
                             success: function () {
-                                if(opts.onAliveSuccess)
+                                if (opts.onAliveSuccess)
                                     callFunc(opts.onAliveSuccess);
                             },
                             error: function (data) {
                                 //make it 1 sec late to allow hidden to be fired and pop last one
-                                setTimeout(function(){
+                                setTimeout(function () {
                                     exports.info("Error", "Error while trying to refresh your current sessions and you have to login again", {
                                         LoginAgain: {
                                             class: "btn btn-info",
@@ -550,7 +591,7 @@ window.bscom.modals = (function () {
                                         }
                                     });
 
-                                    if(opts.onAliveError)
+                                    if (opts.onAliveError)
                                         callFunc(opts.onAliveError);
 
                                 }, 1000);
