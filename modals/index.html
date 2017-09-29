@@ -5,7 +5,8 @@
     <title>Simple</title>
 
     <!--Bootstrap and Coding Highlights Styling-->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
 
     <!--jQuery and Bootstrap -->
@@ -34,28 +35,20 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" style="margin-bottom: 30px;">
     <div class="row">
         <div class="col-12 col-md-3 push-md-9 bd-sidebar">
             <nav class="bd-links" style="position: fixed">
                 <div class="list-group list-group-root well">
 
 
+                    <a href="index.html#use" class="list-group-item"> How to use it? </a>
 
-
-
-                        <a href="index.html#use" class="list-group-item"> How to use it? </a>
-
-                        <a href="index.html#data" class="list-group-item" > Using Data Attributes</a>
-                        <a href="index.html#js" class="list-group-item" > Using Javascript</a>
-                        <a href="index.html#mt" class="list-group-item" > Modal Types</a>
-                        <a href="types.html" class="list-group-item" > Modal Types (Advanced)</a>
-
-
-
-
-
-
+                    <a href="index.html#data" class="list-group-item"> Using Data Attributes</a>
+                    <a href="index.html#js" class="list-group-item"> Using Javascript</a>
+                    <a href="index.html#mt" class="list-group-item"> Modal Types</a>
+                    <a href="index.html#to" class="list-group-item">Periodic Timeouts</a>
+                    <a href="types.html" class="list-group-item"> Modal Types (Advanced)</a>
 
 
                 </div>
@@ -66,21 +59,25 @@
         <div class="col-12 col-md-9 pull-md-3 bd-content">
 
             <div class="row">
-            <div class="col-md-12">
-                <h2>Modals</h2>
+                <div class="col-md-12">
+                    <h2>Modals</h2>
+                </div>
+                <div class="col md-12"><p>Easy more than you might think, robust with all possible scenarios with
+                    examples for each case.</p></div>
             </div>
-            <div class="col md-12"><p>Easy more than you might think, robust with all possible scenarios with examples for each case.</p></div>
-        </div>
 
             <h5 class="alert alert-info" id="use"> How to use it? </h5>
             <div class="row">
 
-                <div class="col-md-12">You ONLY need to reference the modals library javascript file into <code>script</code> inside your page
-                    <pre><code class="hljs html">&lt;script type="text/javascript" src="/bscom.modals.js">&lt;/script></code> </pre>
+                <div class="col-md-12">You ONLY need to reference the modals library javascript file into
+                    <code>script</code> inside your page
+                    <pre><code
+                            class="hljs html">&lt;script type="text/javascript" src="/bscom.modals.js">&lt;/script></code> </pre>
 
-                    Please make sure that bootstrap version 4 and also jquery library both are already referenced in your pages before start using this library
-                    <br />
-                    <br />
+                    Please make sure that bootstrap version 4 and also jquery library both are already referenced in
+                    your pages before start using this library
+                    <br/>
+                    <br/>
                 </div>
 
             </div>
@@ -232,18 +229,19 @@ href="#" class="btn btn-primary"&gt;Large&lt;/a&gt;
     data-ajax="../resource.html"
     href="#" class="btn btn-primary"&gt;Simple&lt;/a&gt;
 </code> </pre>
-                    <a data-toggle="modal" data-title="Ajax" data-ajax="//raw.githubusercontent.com/msolimans/BSComponents/master/resource.html" href="#"
+                    <a data-toggle="modal" data-title="Ajax"
+                       data-ajax="//raw.githubusercontent.com/msolimans/BSComponents/master/resource.html" href="#"
                        class="btn btn-primary">Simple Ajax</a>
                 </div>
             </div>
 
             <!-------------------------------->
-<div class="row">
-    <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
 
-            <h5 id="js" class="alert alert-info">Using Javascript</h5>
-    </div>
-</div>
+                    <h5 id="js" class="alert alert-info">Using Javascript</h5>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     In javascript, you can call modal from namespace <code>bscom.modals</code>, just pass only the title
@@ -266,7 +264,8 @@ href="#" class="btn btn-primary"&gt;Large&lt;/a&gt;
 
             <div class="row">
                 <div class="col-md-12">
-<b>Get the resource using jQuery and inject what is coming from there into the modal content, it will execute any javascript too like handling event handlers for modal's input elements.</b>
+                    <b>Get the resource using jQuery and inject what is coming from there into the modal content, it
+                        will execute any javascript too like handling event handlers for modal's input elements.</b>
                     <pre><code class="hljs js">
 $("#ajax").click(function (e) {
     e.preventDefault();
@@ -288,10 +287,10 @@ $("#ajax").click(function (e) {
             </div>
 
 
-
             <div class="row">
                 <div class="col-md-12">
-                    <p>By default size is small when calling <code>simple()</code> function however if you called <code>show()</code> or <code>open()</code> default size is medium</p>
+                    <p>By default size is small when calling <code>simple()</code> function however if you called <code>show()</code>
+                        or <code>open()</code> default size is medium</p>
                     <div class="row">
                         <div class="col-md-12">
                             <pre><code class="hljs js">
@@ -318,29 +317,33 @@ $("#ajax_simple").click(function (e) {
             </div>
 
 
-
             <div class="row">
                 <div class="col-md-12">
-
                     <h5 id="mt" class="alert alert-info">Modal Types</h5>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-12">
-                    <p>Different types and styles for modals are also supported, suppose you want to warn your users or to inform them with a notification, give them an error or confirm to do some action like deleting an item or doing some critical action</p>
+                    <p>Different types and styles for modals are also supported, suppose you want to warn your users or
+                        to inform them with a notification, give them an error or confirm to do some action like
+                        deleting an item or doing some critical action</p>
                 </div>
                 <div class="col-md-6">
                     <b>Simple Modal</b>
                     <pre><code class="hjls js">bscom.modals.simple("Simple", "Simple Msg")
                     </code></pre>
-                    <button class="btn btn-secondary" onclick='bscom.modals.simple("Simple!", "My simple message goes here!")'>Simple</button>
+                    <button class="btn btn-secondary"
+                            onclick='bscom.modals.simple("Simple!", "My simple message goes here!")'>Simple
+                    </button>
                 </div>
                 <div class="col-md-6">
                     <b>Success Modal</b>
                     <pre><code class="hjls js">bscom.modals.success("Success", "Success Msg")
                     </code></pre>
-                    <button class="btn btn-success" onclick='bscom.modals.success("Success!", "My success message goes here!")'>Success</button>
+                    <button class="btn btn-success"
+                            onclick='bscom.modals.success("Success!", "My success message goes here!")'>Success
+                    </button>
                 </div>
 
                 <div class="col-md-6">
@@ -350,7 +353,9 @@ $("#ajax_simple").click(function (e) {
 bscom.modals.info("Info!", "Info goes here!");
 bscom.modals.inform("Info!", "Info goes here!");
                     </code></pre>
-                    <button class="btn btn-info" onclick='bscom.modals.inform("Info!", "Some information for user goes here!")'>Info</button>
+                    <button class="btn btn-info"
+                            onclick='bscom.modals.inform("Info!", "Some information for user goes here!")'>Info
+                    </button>
                 </div>
 
                 <div class="col-md-6">
@@ -359,7 +364,10 @@ bscom.modals.inform("Info!", "Info goes here!");
 //warn or warning (just naming)
 bscom.modals.warn("Warning!", "My Warning");
 bscom.modals.warning("Warning!", "My Warning");
-                    </code></pre> <button class="btn btn-warning" onclick='bscom.modals.warn("Warning!", "System will shutdown after 5 minutes!")'>Warning</button>
+                    </code></pre>
+                    <button class="btn btn-warning"
+                            onclick='bscom.modals.warn("Warning!", "System will shutdown after 5 minutes!")'>Warning
+                    </button>
                 </div>
 
                 <div class="col-md-6">
@@ -369,34 +377,60 @@ bscom.modals.warning("Warning!", "My Warning");
 bscom.modals.err("Err!", "Error goes here");
 bscom.modals.error("Error!", "Error goes here");
                     </code></pre>
-                    <button class="btn btn-danger" onclick='bscom.modals.err("Error!", "Error message goes here !")'>Error</button>
+                    <button class="btn btn-danger" onclick='bscom.modals.err("Error!", "Error message goes here !")'>
+                        Error
+                    </button>
                 </div>
 
                 <div class="col-md-6">
                     <b>Confirm Modal</b>
 
- <pre><code class="hjls js">
+                    <pre><code class="hjls js">
 bscom.modals.confirm("Confirm?",
      "Are you sure?",
      function(){ alert("Okay"); });'>
 </code> </pre>
-                    <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>
+                        Confirm
+                    </button>
                 </div>
+
 
                 <!---------------------------------------------->
-                <div class="row">
-                    <div class="col-md-12">For more Advanced Modal Types scenarios and actions, please check <a href="types.html">this link!</a> &nbsp;<br /> <br /> <br /> <br /></div>
-                </div>
 
-<!---------------------------------------------->
+                <div class="col-md-12">For more Advanced Modal Types scenarios and actions, please check <a
+                        href="types.html">this link!</a> &nbsp;<br/> <br/> </div>
 
-
-
+                <!---------------------------------------------->
 
 
             </div>
 
+            <!---------------------------------------------->
 
+            <div class="row">
+                <div class="col-md-12">
+
+                    <h5 id="to" class="alert alert-info">Periodic Timeouts</h5>
+                </div>
+            </div>
+
+            <!---------------------------------------------->
+            <div class="row">
+                <div class="col-md-12">
+                    <b>Timeout Modal</b>
+                    <p>This should display a popup window periodically, by default it is ticking/poping up after 3 seconds and counts for 10 seconds more then redirecting to <code>redirect</code>url</p>
+                    <b>Most Important Parameters:</b>
+
+                    <pre><code class="hjls js">bscom.modals.timeout("Timeout",
+                      "Should redirect to 'redirect' after {{c}}, you can 'Stay Connected'/'Logout'")
+                    </code></pre>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.timeout("Timeout", "Should redirect to <code>redirect</code> after {{c}}, options for <code>Stay Connected</code> and <code>Logout</code>", {})'>Timeout</button>
+                    Want more configuration options, please check <a href="./timeout.html">this</a>
+                </div>
+            </div>
 
         </div>
 
