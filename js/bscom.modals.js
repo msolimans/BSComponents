@@ -236,7 +236,9 @@ window.bscom.modals = (function () {
 
 
             //remove the last elem (we don't need it anymore) - we should not remove timeout ones
+            //in case there is an error in aliveRequest, we should stop the timer which means we should call the following block as we don't need this popup anymore!
             if(!elem.timer) {
+                //console.log("popout");
                 $modals.pop();
                 counter--;
                 $mw.find("div.modal-content").html("");
@@ -553,8 +555,11 @@ window.bscom.modals = (function () {
             };
 
             var opts = Array.prototype.slice.call(arguments, 2); //exclude first 2 args
-            if (!opts || opts.length === 0 || (opts.length === 1 && typeof(opts[0]) === "object"))
+            if (!opts || opts.length === 0 || (opts.length === 1 && typeof(opts[0]) === "object")) {
+                if (opts[0].after) opts[0].after *= 1000;
+                if (opts[0].count) opts[0].count *= 1000;
                 opts = $.extend(defaults, opts[0]);
+            }
             else {
                 var t = {};
                 t.after = opts[0];
@@ -583,6 +588,9 @@ window.bscom.modals = (function () {
                                     callFunc(opts.onAliveSuccess);
                             },
                             error: function (data) {
+                                //get current and remove timer (it should not tick again)
+                                //TODO: sto should not be stopped in case of error to redirect to redirect url after specified time.. sto should be stopped after action executed
+                                //getCurrent().timer = undefined;
                                 //make it 1 sec late to allow hidden to be fired and pop last one
                                 setTimeout(function () {
                                     exports.info("Error", "Error while trying to refresh your current sessions and you have to login again", {
