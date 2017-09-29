@@ -537,7 +537,7 @@ window.bscom.modals = (function () {
             //opts => {after: 60 sec, count: 20 sec=> if counter specified it should be displayed inside body, redirect: url (if not specified logout will be used), logout: this is url, live: this is also url}
             var defaults = {
                 after: 3 * 1000,//display after 3 secs
-                count: 3 * 1000,//count for 3 secs
+                count: 10 * 1000,//count for 3 secs
                 alive: "/alive",
                 aliveData: {},
                 aliveType: "GET",
@@ -633,13 +633,13 @@ window.bscom.modals = (function () {
             var timer = undefined;
             var onShow = undefined;
 
-            if (btns.length == 1) {
+            if (btns.length === 1) {
                 timer = btns[0].popupConfigs && btns[0].popupConfigs.timer;
                 onShow = btns[0].popupConfigs && btns[0].popupConfigs.onShow;
                 delete btns[0].popupConfigs;
             }
 
-            if (!btns || btns.length == 0) {
+            if (!btns || btns.length === 0) {
                 return exports.info(title, body);
             }
 
@@ -648,8 +648,8 @@ window.bscom.modals = (function () {
             temp = $.extend(temp, generateBtn(btns[0], "Yes"));
 
             //Generate NO in case we have only length of ONE and it is of type string/function or (object and has only one key)
-            if (btns.length == 1) {
-                if (typeof(btns[0]) == 'string' || typeof(btns[0]) == 'function' || (typeof(btns[0]) == "object" && Object.keys(btns[0]).length == 1))
+            if (btns.length === 1) {
+                if (typeof(btns[0]) === 'string' || typeof(btns[0]) === 'function' || (typeof(btns[0]) === "object" && Object.keys(btns[0]).length === 1))
                     temp = $.extend(temp, generateBtn({no: {}}));
             }
             else
