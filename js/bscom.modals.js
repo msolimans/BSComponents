@@ -108,7 +108,7 @@ window.bscom.modals = (function () {
             '</button>' +
             '</div>' +
             '<div class="modal-body">' +
-            elem.body.replace(/\{\{(c|counter|cc)\}\}/gi, "<span id='" + elem.id + "-counter'></span>") + //where the real content of the modal should be injected
+            elem.body.replace(/\{\{(c|counter|cc)\}\}/gi, "<span id='" + elem.id + "-counter'></span>") + //where the real content of the modal should be injected (counters replaced with spans)
             '</div>' +
             injectButtons(elem) //where buttons are going in the footer
         );
@@ -213,11 +213,11 @@ window.bscom.modals = (function () {
     };
 
     var injectCounter = function($c, timer){
-        if(!timer.type || timer.type === "progressbar" || timer.type === "pg")
+        if(!timer.type || timer.type === "progressbar" || timer.type === "pg" || timer.type == 0)
             new Counting().setStrategy(new ProgressBar()).draw($c, timer.count  / 1000);
-        else if(timer.type === "countdown" || timer.type === "-1" || timer.type === -1)
+        else if(timer.type === "countdown" || timer.type === "down" || timer.type === "-1" || timer.type === -1)
             new Counting().setStrategy(new CountDown()).draw($c, timer.count / 1000);
-        else if(timer.type === "countup" || timer.type === "1" || timer.type === 1)
+        else if(timer.type === "countup" || timer.type === "up" ||  timer.type === "1" || timer.type === 1)
             new Counting().setStrategy(new CountUp()).draw($c, timer.count / 1000);
     };
 
@@ -232,13 +232,6 @@ window.bscom.modals = (function () {
             if ($(this)) {
                 var $modalDialog = $(this).find(".modal-dialog");
 
-                //if ($modalDialog.prop("class").indexOf("modal-lg") > -1) {
-                //    //$(this).find('.modal-dialog').css('overflow-y', 'auto');
-                //    $modalDialog.css('width', $(window).width() * 0.90);
-
-                //} else if ($modalDialog.prop("class").indexOf("modal-md") > -1) {
-                //    $modalDialog.css('width', $(window).width() * 0.60);
-                //}
                 $modalDialog.removeClass("modal-xs").removeClass("modal-sm").removeClass("modal-md").removeClass("modal-lg").removeClass("modal-xl");
 
                 getCurrent().size = getCurrent().size || "md";
@@ -610,7 +603,7 @@ window.bscom.modals = (function () {
             var defaults = {
                 after: 3 * 1000,//display after 3 secs
                 count: 10 * 1000,//count for 3 secs
-                alive: "/alive",
+                alive: "/BSComponents/modals/alive.html",
                 aliveData: {},
                 aliveType: undefined,
                 aliveRequestType: undefined,
@@ -622,13 +615,14 @@ window.bscom.modals = (function () {
                 onAliveSuccess: undefined,
                 onAliveError: undefined,
                 ignoreUserActivity: true,
+                debug: true,
                 type: "-1" /* -1 | countdown, countup | 1 , progressbar */
             };
 
             var opts = Array.prototype.slice.call(arguments, 2); //exclude first 2 args
             if (!opts || opts.length === 0 || (opts.length === 1 && typeof(opts[0]) === "object")) {
-                if (opts[0].after) opts[0].after *= 1000;
-                if (opts[0].count) opts[0].count *= 1000;
+                if (opts[0] && opts[0].after) opts[0].after *= 1000;
+                if (opts[0] && opts[0].count) opts[0].count *= 1000;
                 opts = $.extend(defaults, opts[0]);
             }
             else {
@@ -646,10 +640,10 @@ window.bscom.modals = (function () {
 
             //clone logout in case redirect not passed
             opts.redirect = opts.redirect || opts.logout;
-
-            return exports.confirm(title, body, {
+            var confirmOpts = {
                 StayConnected: {
-                    class: "btn btn-primary", action: function () {
+                    class: "btn btn-primary",
+                    action: function () {
                         $.ajax({
                             url: opts.alive,
                             type: opts.aliveType || opts.aliveRequestType || opts.aliveAjaxType,
@@ -683,7 +677,8 @@ window.bscom.modals = (function () {
                     }
                 },
                 Logout: {
-                    class: "btn btn-danger", action: function () {
+                    class: "btn btn-danger",
+                    action: function () {
                         //clear timeout that was started
                         window.location = opts.logout;
                     }
@@ -700,7 +695,19 @@ window.bscom.modals = (function () {
                     }
                 }
 
-            });
+            };
+
+            if(opts.debug){
+                confirmOpts.Clear = {
+                    class: "btn btn-default",
+                    action: function(){
+                        //clearTimeout(getCurrent().timerId);
+                        delete getCurrent().timer; //remove all timer object to avoid being redisplayed again
+                    }
+                }
+            }
+
+            return exports.confirm(title, body, confirmOpts );
         },
 
         //e.g. buttons: { Yes: {class: "btn btn-success", action: function(){ ... } }, No: { action: function(){ ... } } }
