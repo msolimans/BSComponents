@@ -147,6 +147,81 @@ window.bscom.modals = (function () {
 
     };
 
+    var Counting = function () {
+        this.algorithm = undefined;
+    };
+
+    Counting.prototype = {
+        setStrategy: function (algorithm) {
+            this.algorithm = algorithm;
+            return this; //chaining
+        },
+        draw: function ($c, count) {
+            if (this.algorithm) {
+                return this.algorithm.draw($c, count);
+            }
+        }
+    };
+
+    var ProgressBar = function () {
+        this.draw = function ($c, count) {
+            //count is total here
+            var scale = 100/count;
+
+            $c.html("<div class=\"progress\">\n" +
+                "  <div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width: " + scale + "%\" aria-valuenow=\"" + scale + "\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>");
+
+            var i = scale;
+            var interval = setInterval(function () {
+                i+=scale;
+                if (i >= 100)
+                    clearInterval(interval);
+                $c.html("<div class=\"progress\">\n" +
+                    "  <div class=\"progress-bar progress-bar-striped\" role=\"progressbar\" style=\"width: " + i + "%\" aria-valuenow=\"" + i + "\" aria-valuemin=\"0\" aria-valuemax=\"" + count + "\"></div>");
+            }, 1000);
+        }
+    };
+
+    var CountUp = function () {
+        this.draw = function ($c, count) {
+            //count is total here
+            $c.text("1 out of " + count);
+            var i = 1;
+            var interval = setInterval(function () {
+                if (++i === count)
+                    clearInterval(interval);
+                $c.text(i + " out of " + count);
+            }, 1000);
+
+        }
+    };
+
+    var CountDown = function () {
+        this.draw = function ($c, count) {
+            //count is start point here
+            $c.text(count);
+
+            var interval = setInterval(function () {
+                if (count === 0)
+                    clearInterval(interval);
+
+                $c.text(--count);
+            }, 1000);
+
+
+        }
+    };
+
+    var injectCounter = function($c, timer){
+        if(!timer.type || timer.type === "progressbar" || timer.type === "pg")
+            new Counting().setStrategy(new ProgressBar()).draw($c, timer.count  / 1000);
+        else if(timer.type === "countdown" || timer.type === "-1" || timer.type === -1)
+            new Counting().setStrategy(new CountDown()).draw($c, timer.count / 1000);
+        else if(timer.type === "countup" || timer.type === "1" || timer.type === 1)
+            new Counting().setStrategy(new CountUp()).draw($c, timer.count / 1000);
+    };
+
+
     var registerEvents = function (elem) {
 
         var $mw = elem.window, data = elem.data, cb = elem.cb, hiddenCb = elem.hcb;
@@ -209,15 +284,10 @@ window.bscom.modals = (function () {
             var elem = getCurrent();
             if (elem.timer && elem.timer.count) {
                 var $c = $(this).find("#" + elem.id + "-counter");
-                var count = elem.timer.count / 1000;
-                $c.text(count);
                 if ($c && $c.length > 0) {
-                    //count down there
-                    var interval = setInterval(function () {
-                        if (count == 0)
-                            clearInterval(interval);
-                        $c.text(--count);
-                    }, 1000);
+
+                    injectCounter($c, elem.timer);
+
                 }
             }
 
@@ -237,12 +307,12 @@ window.bscom.modals = (function () {
 
             //remove the last elem (we don't need it anymore) - we should not remove timeout ones
             //in case there is an error in aliveRequest, we should stop the timer which means we should call the following block as we don't need this popup anymore!
-            if(!elem.timer) {
+            if (!elem.timer) {
                 //console.log("popout");
                 $modals.pop();
                 counter--;
                 $mw.find("div.modal-content").html("");
-            }else{
+            } else {
                 showModal();
             }
 
@@ -269,7 +339,7 @@ window.bscom.modals = (function () {
             delete  elem.timerId;
             setCurrent(elem);
             //hasTimers = false;
-            if(elem.timer && !elem.timer.ignoreUserActivity)
+            if (elem.timer && !elem.timer.ignoreUserActivity)
                 unRegisterTimerEvents();
         }
 
@@ -286,7 +356,7 @@ window.bscom.modals = (function () {
 
         var elem = getCurrent();
 
-        if(!injectedBefore) {
+        if (!injectedBefore) {
             injectModalInfo(elem);
 
 
@@ -551,7 +621,8 @@ window.bscom.modals = (function () {
                 onShow: undefined,
                 onAliveSuccess: undefined,
                 onAliveError: undefined,
-                ignoreUserActivity: true
+                ignoreUserActivity: true,
+                type: "-1" /* -1 | countdown, countup | 1 , progressbar */
             };
 
             var opts = Array.prototype.slice.call(arguments, 2); //exclude first 2 args
