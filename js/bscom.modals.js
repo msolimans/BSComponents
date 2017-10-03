@@ -648,11 +648,11 @@ window.bscom.modals = (function () {
                             url: opts.alive,
                             type: opts.aliveType || opts.aliveRequestType || opts.aliveAjaxType,
                             data: opts.aliveData,
-                            success: function () {
+                            success: function (data) {
                                 if (opts.onAliveSuccess)
-                                    callFunc(opts.onAliveSuccess);
+                                    callFunc(opts.onAliveSuccess, data);
                             },
-                            error: function (data) {
+                            error: function (err) {
                                 //get current and remove timer (it should not tick again)
                                 //TODO: sto should not be stopped in case of error to redirect to redirect url after specified time.. sto should be stopped after action executed
                                 //getCurrent().timer = undefined;
@@ -668,7 +668,7 @@ window.bscom.modals = (function () {
                                     });
 
                                     if (opts.onAliveError)
-                                        callFunc(opts.onAliveError);
+                                        callFunc(opts.onAliveError, err);
 
                                 }, 1000);
                             }
