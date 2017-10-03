@@ -542,8 +542,8 @@ window.bscom.modals = (function () {
                 count: 10 * 1000,//count for 3 secs
                 alive: "/alive",
                 aliveData: {},
-                aliveType: "GET",
-                aliveRequestType: "GET",
+                aliveType: undefined,
+                aliveRequestType: undefined,
                 aliveAjaxType: "GET",
                 logout: "/logout",
                 login: "/login",
