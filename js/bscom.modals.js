@@ -603,7 +603,7 @@ window.bscom.modals = (function () {
             var defaults = {
                 after: 3 * 1000,//display after 3 secs
                 count: 10 * 1000,//count for 3 secs
-                alive: "/BSComponents/modals/alive.html",
+                alive: "/alive",
                 aliveData: {},
                 aliveType: undefined,
                 aliveRequestType: undefined,
