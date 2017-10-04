@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Timeout Popups</title>
+
+    <!--Bootstrap and Coding Highlights Styling-->
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+    <!--jQuery and Bootstrap -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.10.0/jquery.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+
+    <!--BSComp, Modals (only one reference)-->
+    <script src="../js/bscom.modals.js"></script>
+
+    <!--Coding Highlights-->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+    <style>
+        pre {
+            margin-bottom: 0px;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .list-group > .list-group > .list-group-item {
+            padding-left: 35px;
+        }
+
+
+    </style>
+
+
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-3 push-md-9 bd-sidebar">
+            <nav class="bd-links" style="position: fixed">
+                <div class="bd-toc-item">
+
+
+                    <div class="list-group  well">
+
+                        <!--<a href="index.html" class="list-group-item">-->
+                            <!--Return Back to Modals-->
+                        <!--</a>-->
+                        <!--<div class="list-group collapse" id="item-1">-->
+
+
+                            <!--<a href="index.html#use" class="list-group-item"> How to use it? </a>-->
+
+                            <!--<a href="index.html#data" class="list-group-item"> Using Data Attributes</a>-->
+                            <!--<a href="index.html#js" class="list-group-item"> Using Javascript</a>-->
+                            <!--<a href="index.html#mt" class="list-group-item"> Modal Types</a>-->
+                            <!--<a href="types.html" class="list-group-item"> Modal Types (Advanced)</a>-->
+
+                        <!--</div>-->
+
+                        <a href="#use" class="list-group-item"> How to use it? </a>
+
+                        <a href="index.html" class="list-group-item">
+                            Modals
+                        </a>
+                        <div class="list-group collapse" id="item-1">
+                            <a href="index.html#data" class="list-group-item"> Using Data Attributes</a>
+                            <a href="index.html#js" class="list-group-item"> Using Javascript</a>
+                            <a href="index.html#mt" class="list-group-item"> Modal Types</a>
+                            <a href="index.html#to" class="list-group-item">Periodic Timeouts</a>
+                        </div>
+                        <a href="types.html" class="list-group-item"> Modal Types (Advanced)</a>
+
+                        <span class="list-group-item">Periodic Timeouts (Advanced)</span>
+
+
+                    </div>
+
+
+                </div>
+
+            </nav>
+
+        </div>
+        <div class="col-12 col-md-9 pull-md-3 bd-content">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Timeout Modals (Advanced)</h2>
+                </div>
+                <div class="col md-12"><p>Easier more than you might think, included all possible scenarios with examples for each case.</p></div>
+            </div>
+
+            <h5 class="alert alert-info" id="use"> How to use it? </h5>
+            <div class="row">
+
+                <div class="col-md-12">You ONLY need to reference the modals library javascript file into
+                    <code>script</code> inside your page
+                    <pre><code
+                            class="hljs html">&lt;script type="text/javascript" src="/bscom.modals.js">&lt;/script></code> </pre>
+
+                    Please make sure that bootstrap version 4 and also jquery library both are already referenced in
+                    your pages before start using this library
+                    <br/>
+                    <br/>
+                </div>
+
+            </div>
+
+            <!---------------------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p><b>Timeout Modal: </b>
+                        Timeout can be used for session timeouts to warn users before his online session is going to end
+                        or expire, it comes with 2 options or buttons that allow user to either stay connected or logout
+                        as he no longer needs to use the website, in case user did not click those buttons, it will
+                        redirect him/her to a <code>redirect</code> url. below are some examples with short description.
+                        if you need more info. drop me an email "m.solimanz@hotmail.com". <br/>
+
+                    </p>
+                    <p><b>Simplest way: </b> You can specify only title and body as usual in modals, By default it
+                        should popup after <b>3</b> seconds and count for <b>10</b> seconds then redirects to <code>logout</code>
+                        url. <code>{{c}}</code> is a placeholder for counter, if you don't need it you can simply remove it at all.</p>
+
+                    <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.timeout("Session Timeout?", "Your session is going to end after {{c}}");'>
+    Timeout
+&lt;/button>
+                    </code> </pre>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.timeout("Session Timeout?", "Your session is going to end after {{c}}, Stay Connected or Logout now?");'>
+                        Simple Timeout
+                    </button>
+                    <br/><br/>
+                    <p>You can easily remove <code>Clear</code> button by specifying <code>{debug: false}</code></p>
+<pre><code class="hjls html">&lt;button class="btn btn-primary"
+ onclick='bscom.modals.timeout("Timeout?", "Your session is going to end after {{c}}", {debug: false});'>
+ Timeout
+&lt;/button>
+</code> </pre>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.timeout("Session Timeout?", "Your session is going to end after {{c}}, Stay Connected or Logout now?", {debug: false});'>
+                        Simple Timeout
+                    </button>
+
+                </div>
+            </div>
+
+            <!---------------------------------------------->
+            <div class="row">
+                <div class="col-md-12">
+                    <p><b>Counter Types: </b> You can specify the type of counter in the popup, 3 types or options are
+                        available: you have to put in the body <code>{{c}}</code> otherwise it will not be displayed
+                        <br/>
+                        1. Count down (<code>countdown | down | -1</code>) <br/>
+                        2. Count up (<code>countup | up | 1</code>) <br/>
+                        3. Progress bar (<code>progressbar | pg | 0</code>)
+                    </p>
+                    <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.timeout("Timeout?", "Session is going to end after {{c}}", {type: 0, alive: "./alive.html"})'>
+                        Progressbar&lt;/button>
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.timeout("Timeout?", "Session is going to end after {{c}}", {type: -1})'>
+                        Countdown&lt;/button>
+&lt;button class="btn btn-primary"
+    onclick='bscom.modals.timeout("Timeout?", "Session is going to end within {{c}}", {type: 1})'>
+                        Countup&lt;/button>
+
+</code> </pre>
+
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.timeout("Session Timeout?", "Session is going to end after {{c}}", {type: 0});'>
+                        Progressbar
+                    </button>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.timeout("Session Timeout?", "Session is going to end after {{c}}", {type: -1});'><i class="fa fa-arrow-circle-down"  ></i>
+                        Countdown
+                    </button>
+
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.timeout("Session Timeout?", "Session is going to end within {{c}}", {type: 1});'><i class="fa fa-arrow-circle-up"  ></i>
+
+                        Countup
+                    </button>
+
+                </div>
+            </div>
+            <!---------------------------------------------->
+            <div class="row">
+                <div class="col-md-12">
+                    <p>
+                        <b>Timings: </b> You can specify when to display you timeout window and for how long it should be
+                        displayed before redirecting to <code>redirect</code> in case user did not press anything.
+                        - <code>{after: ...} </code> is used to specify when the popup should be displayed, this time
+                        should be specified in seconds (by default it's <b>3</b> seconds) <br/>
+                        - <code>{count: ...} </code> is used to specify for how long the popup should be displayed,
+                        after this time the user should be redirected to <code>redirect</code> url. <br/>
+                     <p>
+                        The following example is poping up the window after 0 seconds, then displayed and count for 60
+                        seconds then redirect to <code>redirect</code> <br/>
+
+                    <b>Hint: </b> Please note that when you click <code>Stay Connected</code>, it is directly displayed again
+                        directly <code>after</code> <b>0 seconds</b>
+                    </p>
+                    </p>
+                    <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+ onclick='bscom.modals.timeout("Timeout?", "Your session will end after {{c}}", {after: 0, count: 60})'>
+Progressbar&lt;/button>
+</code> </pre>
+
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.timeout("Session Timeout?", "Your session is going to end after {{c}}", {after: 0, count: 60});'>
+                        Timeout (60 secs)
+                    </button>
+                </div>
+            </div>
+            <!---------------------------------------------->
+            <br/>
+            <div class="row">
+                <div class="col-md-12">
+                    <p><b>Event Handlers: </b>you can manage and hook your handlers in different events, If you have any
+                        other events please contact me.</p>
+                    - <code>onShow: function</code><br/>
+                    - <code>onAliveSuccess: function</code><br/>
+                    - <code>onAliveError: function</code><br/>
+                    <pre><code class="hjls html">
+&lt;button class="btn btn-primary"
+    onclick='handlers()'>Progressbar&lt;/button>
+&lt;script>
+function handlers(){
+  bscom.modals.timeout("Timeout?",
+    "Your session is going to end after {{c}}",
+    {
+       type: 0,
+       onShow: function(){alert("shown");},
+       onAliveSuccess: function(res){alert("Session Renewed, response returned from server " + res);},
+       onAliveError: function(err){alert("Alive Ajax Request Error was " + err);}
+    });
+}
+&lt;/script>
+</code> </pre>
+                    <button class="btn btn-success"
+                            onclick='bscom.modals.timeout("Timeout?","Your session is going to end after {{c}}",{type: 0,onShow: function(){alert("shown");},onAliveSuccess: function(res){alert("Session Renewed, response returned from server " + res);},onAliveError: function(err){alert("Alive Ajax Request Error was " + err);}});'>
+                        Timeout with Events (success)
+                    </button>
+                    <br/><br/>
+                    <p>You can specify <code>url</code> to be used for pinging the server to renew current session and
+                        also you have the ability to specify ajax type and data using these properties <code>{alive:
+                            ..., aliveAjaxType: ..., aliveData: {...} } </code></p>
+
+                    <button class="btn btn-danger"
+                            onclick='bscom.modals.timeout("Timeout?","Your session is going to end after {{c}}",{alive: "/invalidURL", type: 0,onShow: function(){alert("shown");},onAliveSuccess: function(res){alert("Session Renewed, response returned from server " + res);},onAliveError: function(err){alert("Alive Ajax Request Error was " + err);}});'>
+                        Timeout with Events (error)
+                    </button>
+                </div>
+            </div>
+            <br/><br/>
+            <!---------------------------------------------->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <b>URLs (login, live, redirect, and logout)</b>
+                    You can customize all URLs based on your application's needs, here is the definition of each
+                    one:<br/>
+                    - <code>alive</code>: This URL is used by timeout to request your server (by default it is using
+                    <code>GET</code>) however you can override using <code>aliveAjaxType</code>, once user clicked
+                    <code>Stay Connected</code><br/>
+                    - <code>logout</code>: It will redirect to this URL in case user clicked <code>Logout</code> button.<br/>
+                    - <code>login</code>: Once User click on <code>Stay Connected</code> to renew her session however
+                    sometimes errors might occur while refreshing the current session using <code>alive</code> url, e.g.
+                    ajax error due to invalid url or server error, at this time another popup should appear and ask user
+                    to login again. in such case it is required to specify your <code>login</code> URL. by default it
+                    has a value <code>/login</code><br/>
+                    - <code>redirect</code>: In case user neither clicked on <code>Stay Connected</code> nor <code>Logout</code>,
+                    e.g. cases when user left his machine, window will be redirect at this time to another URL informing
+                    user that he was logged out due to inactivity.<br/>
+                    <pre><code class="hljs js">
+  function handlers(){
+        bscom.modals.timeout("Timeout?",
+            "Your session is going to end after {{c}}",
+            {
+                type: -1,
+                alive: "./alive.html",
+                logout: "./logout.html",
+                login: "./login.html"
+                redirect: "./inactive.html",
+            });
+    }
+                        </code></pre>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.timeout("Timeout?","Your session is going to end after {{c}}",{alive: "./alive.html", login: "./login.html", logout: "./logout.html", redirect: "./inactive.html"});'>
+                        Timeout (URLs)
+                    </button>
+
+                </div>
+            </div>
+
+
+            <!---------------------------------------------->
+
+            <p><b>Hint: </b>Live Demo will be added in future with all possible configuration options.<br /></p>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
