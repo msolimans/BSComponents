@@ -5,7 +5,8 @@
     <title>Modal Types</title>
 
     <!--Bootstrap and Coding Highlights Styling-->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
 
     <!--jQuery and Bootstrap -->
@@ -30,12 +31,9 @@
             margin-top: 10px;
         }
 
-
         .list-group > .list-group > .list-group-item {
             padding-left: 35px;
         }
-
-
 
 
     </style>
@@ -51,33 +49,41 @@
                 <div class="bd-toc-item">
 
 
+                    <div class="list-group  well">
+
+                        <!--<a href="index.html" class="list-group-item" >-->
+                        <!--Return Back to Modals-->
+                        <!--</a>-->
+                        <!--<div class="list-group collapse" id="item-1">-->
 
 
-                        <div class="list-group  well">
+                        <!--<a href="index.html#use" class="list-group-item"> How to use it? </a>-->
 
-                            <a href="index.html" class="list-group-item" >
-                                Return Back to Modals
-                            </a>
-                            <div class="list-group collapse" id="item-1">
-
-
-                                <a href="index.html#use" class="list-group-item"> How to use it? </a>
-
-                                <a href="index.html#data" class="list-group-item" > Using Data Attributes</a>
-                                <a href="index.html#js" class="list-group-item" > Using Javascript</a>
-                                <a href="index.html#mt" class="list-group-item" > Modal Types</a>
+                        <!--<a href="index.html#data" class="list-group-item" > Using Data Attributes</a>-->
+                        <!--<a href="index.html#js" class="list-group-item" > Using Javascript</a>-->
+                        <!--<a href="index.html#mt" class="list-group-item" > Modal Types</a>-->
+                        <!--<span class="list-group-item" > Modal Types (Advanced) </span>-->
+                        <!--<a href="index.html#to" class="list-group-item">Periodic Timeouts</a>-->
+                        <!--<a href="timeout.html" class="list-group-item">Periodic Timeouts (Advanced)</a>-->
 
 
+                        <!--</div>-->
+                        <a href="#use" class="list-group-item"> How to use it? </a>
 
-                            </div>
-
-
-
-
+                        <a href="index.html" class="list-group-item">
+                            Modals
+                        </a>
+                        <div class="list-group collapse" id="item-1">
+                            <a href="index.html#data" class="list-group-item"> Using Data Attributes</a>
+                            <a href="index.html#js" class="list-group-item"> Using Javascript</a>
+                            <a href="index.html#mt" class="list-group-item"> Modal Types</a>
+                            <a href="index.html#to" class="list-group-item">Periodic Timeouts</a>
                         </div>
+                        <span class="list-group-item"> Modal Types (Advanced) </span>
+                        <a href="timeout.html" class="list-group-item">Periodic Timeouts (Advanced)</a>
 
 
-
+                    </div>
 
 
                 </div>
@@ -90,18 +96,22 @@
                 <div class="col-md-12">
                     <h2>Modal Types (Advanced)</h2>
                 </div>
-                <div class="col md-12"><p>Easy more than you might think, robust with all possible scenarios with examples for each case.</p></div>
+                <div class="col md-12"><p>Easier more than you might think, included all possible scenarios with
+                    examples for each case.</p></div>
             </div>
 
             <h5 class="alert alert-info" id="use"> How to use it? </h5>
             <div class="row">
 
-                <div class="col-md-12">You ONLY need to reference the modals library javascript file into <code>script</code> inside your page
-                    <pre><code class="hljs html">&lt;script type="text/javascript" src="/bscom.modals.js">&lt;/script></code> </pre>
+                <div class="col-md-12">You ONLY need to reference the modals library javascript file into
+                    <code>script</code> inside your page
+                    <pre><code
+                            class="hljs html">&lt;script type="text/javascript" src="/bscom.modals.js">&lt;/script></code> </pre>
 
-                    Please make sure that bootstrap version 4 and also jquery library both are already referenced in your pages before start using this library
-                    <br />
-                    <br />
+                    Please make sure that bootstrap version 4 and also jquery library both are already referenced in
+                    your pages before start using this library
+                    <br/>
+                    <br/>
                 </div>
 
             </div>
@@ -110,16 +120,22 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <p> <b>Confirm Modal</b>
-                        Confirm can be used in different ways with flexibility to specify class names and titles of buttons with event handlers for each one. below are some examples with short description. if you need more info. drop me an email "m.solimanz@hotmail.com"
+                    <p><b>Confirm Modal</b>
+                        Confirm can be used in different ways with flexibility to specify class names and titles of
+                        buttons with event handlers for each one. below are some examples with short description. if you
+                        need more info. drop me an email "m.solimanz@hotmail.com"
                     </p>
-                    <p><b>Simplest way: Inline Event Handler</b></p> <pre><code class="hjls html">
+                    <p><b>Simplest way: Inline Event Handler</b></p>
+                    <pre><code class="hjls html">
 &lt;button class="btn btn-primary"
     onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay"); });'>
     Confirm
 &lt;/button>
                     </code> </pre>
-                    <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>
+                        Confirm
+                    </button>
                 </div>
             </div>
 
@@ -135,7 +151,10 @@
 var okayHandler = function(){ alert("Okay"); }
 &lt;/script>
 </code> </pre>
-                    <button class="btn btn-primary" onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>Confirm</button>
+                    <button class="btn btn-primary"
+                            onclick='bscom.modals.confirm("Confirm?", "Are you sure?", function(){ alert("Okay Pressed!"); })'>
+                        Confirm
+                    </button>
                 </div>
             </div>
             <!---------------------------------------------->

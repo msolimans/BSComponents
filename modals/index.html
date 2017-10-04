@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <title>Simple</title>
 
+
     <!--Bootstrap and Coding Highlights Styling-->
+
     <link rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
@@ -16,6 +18,7 @@
 
     <!--BSComp, Modals (only one reference)-->
     <script src="../js/bscom.modals.js"></script>
+
 
     <!--Coding Highlights-->
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
@@ -30,6 +33,17 @@
         .row {
             margin-top: 10px;
         }
+        pre {
+            margin-bottom: 0px;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        .list-group > .list-group > .list-group-item {
+            padding-left: 35px;
+        }
     </style>
 
 </head>
@@ -37,18 +51,32 @@
 
 <div class="container" style="margin-bottom: 30px;">
     <div class="row">
+
+
         <div class="col-12 col-md-3 push-md-9 bd-sidebar">
             <nav class="bd-links" style="position: fixed">
-                <div class="list-group list-group-root well">
+                <div class="bd-toc-item">
 
 
-                    <a href="index.html#use" class="list-group-item"> How to use it? </a>
+                    <div class="list-group  well">
 
-                    <a href="index.html#data" class="list-group-item"> Using Data Attributes</a>
-                    <a href="index.html#js" class="list-group-item"> Using Javascript</a>
-                    <a href="index.html#mt" class="list-group-item"> Modal Types</a>
-                    <a href="index.html#to" class="list-group-item">Periodic Timeouts</a>
-                    <a href="types.html" class="list-group-item"> Modal Types (Advanced)</a>
+
+                        <a href="#use" class="list-group-item"> How to use it? </a>
+
+                        <span class="list-group-item">
+                            Modals
+                        </span>
+                        <div class="list-group collapse" id="item-1">
+                            <a href="index.html#data" class="list-group-item"> Using Data Attributes</a>
+                            <a href="index.html#js" class="list-group-item"> Using Javascript</a>
+                            <a href="index.html#mt" class="list-group-item"> Modal Types</a>
+                            <a href="index.html#to" class="list-group-item">Periodic Timeouts</a>
+                        </div>
+                        <a href="types.html" class="list-group-item"> Modal Types (Advanced)</a>
+                        <a href="timeout.html" class="list-group-item">Periodic Timeouts (Advanced)</a>
+
+
+                    </div>
 
 
                 </div>
@@ -62,8 +90,7 @@
                 <div class="col-md-12">
                     <h2>Modals</h2>
                 </div>
-                <div class="col md-12"><p>Easy more than you might think, robust with all possible scenarios with
-                    examples for each case.</p></div>
+                <div class="col md-12"><p>Easier more than you might think, included all possible scenarios with examples for each case.</p></div>
             </div>
 
             <h5 class="alert alert-info" id="use"> How to use it? </h5>
@@ -87,9 +114,7 @@
             <!-------------------------------->
             <div class="row">
                 <div class="col-md-12">
-                    In one of line of code you can do it, a simple modal with no code at all, just simple anchor with
-                    some data
-                    elements, all it needs is to add <code>data-toggle="modal"</code>, <code>data-title</code> and
+                    In just one line of code you can do it, just a simple anchor with some data elements/attributes, all it needs is to add <code>data-toggle="modal"</code>, <code>data-title</code> and
                     <code>data-message|data-body</code>
                     <pre>
 <code class="hljs html">&lt;a
@@ -427,7 +452,7 @@ bscom.modals.confirm("Confirm?",
                       "Should redirect to 'redirect' after {{c}}, you can 'Stay Connected'/'Logout'")
                     </code></pre>
                     <button class="btn btn-primary"
-                            onclick='bscom.modals.timeout("Timeout", "Should redirect to <code>redirect</code> after {{c}}, options for <code>Stay Connected</code> and <code>Logout</code>", {})'>Timeout</button>
+                            onclick='bscom.modals.timeout("Timeout", "Should redirect to <code>redirect</code> after {{c}}, options for <code>Stay Connected</code> and <code>Logout</code>")'>Timeout</button>
                     Want more configuration options, please check <a href="./timeout.html">this</a>
                 </div>
             </div>
