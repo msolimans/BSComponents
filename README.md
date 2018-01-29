@@ -1,3 +1,5 @@
+Demo https://msolimans.github.io/modals/
+
 # BSComponents
 
 Components built on top of Bootstrap 4 and jQuery to make development life easier
@@ -20,4 +22,4 @@ Install all required client packages
 3. Push your changes 
 4. Add a new pull request
  
-Demo https://msolimans.github.io/modals/
+
