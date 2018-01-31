@@ -1,4 +1,5 @@
 Demo https://msolimans.github.io/modals/
+Timeout demo: https://codepen.io/anon/pen/MEQjGo
 
 # BSComponents
 
